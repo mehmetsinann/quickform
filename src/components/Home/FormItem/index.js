@@ -75,7 +75,7 @@ const FormItem = ({ formName, submissionInfo, formId }) => {
             >
               <Image
                 source={require("../../../../assets/images/Icons/formIcon.png")}
-                style={styles.formItemIcon}
+                style={[styles.formItemIcon, { width: 20, height: 26 }]}
                 resizeMode="contain"
               />
               <Text style={styles.sheetHeaderText}>{formName}</Text>

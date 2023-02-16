@@ -27,6 +27,7 @@ export const HeaderBar = ({
           onChange={setSearchValue}
           placeholder="search"
           style={{ paddingHorizontal: 10, width: "100%" }}
+          autoFocus
         />
         <TouchableOpacity
           onPress={() => {
