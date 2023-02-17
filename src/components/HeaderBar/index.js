@@ -32,6 +32,7 @@ export const HeaderBar = ({
         <TouchableOpacity
           onPress={() => {
             setIsSearch(false);
+            setSearchValue("");
           }}
           style={styles.closeSearch}
         >

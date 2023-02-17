@@ -8,27 +8,30 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import axios from "axios";
-import { setToken } from "../../redux/slices/tokenSlice";
+import { setUser } from "../../redux/slices/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useRef } from "react";
 import { styles } from "./styles";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase/firebaseConfig";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.userToken.token);
+  const emailRef = useRef();
   const passwordRef = useRef();
 
   // console.log(token);
   function handleLogin(values) {
-    dispatch(
-      setToken(
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJlbWFpbCI6ImpvaG5kb2VAZ21haWwuY29tIn0.UVcQP1df-6lg11oEe0h0HaFQnuKFRLh0RpTfSLV4iSk"
-      )
+    signInWithEmailAndPassword(auth, values.email, values.password).then(
+      (userCredential) => {
+        console.log("==========", userCredential.user);
+        dispatch(setUser(userCredential.user.providerData[0]));
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "HomeScreen" }],
+        });
+      }
     );
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "HomeScreen" }],
-    });
   }
 
   return (
@@ -66,6 +69,7 @@ export default function LoginScreen({ navigation }) {
               onSubmitEditing={() => {
                 passwordRef.current.focus();
               }}
+              ref={emailRef}
               blurOnSubmit={false}
             />
             <Text style={styles.label}>Password</Text>

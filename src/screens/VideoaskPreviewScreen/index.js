@@ -39,7 +39,6 @@ export default function VideoaskPreviewScreen(props) {
   const animatedValue = useRef(new Animated.Value(0)).current;
 
   const formId = useSelector((state) => state.step.formId);
-  const userToken = useSelector((state) => state.userToken.token);
 
   const choices = useSelector((state) => state.step.choices);
   const step = useSelector((state) => state.step);

@@ -25,7 +25,7 @@ const height = Dimensions.get("window").height;
 
 export default function HomeScreen({ navigation }) {
   const [isSearch, setIsSearch] = useState(false);
-  const userToken = useSelector((state) => state.userToken.token);
+  const userInfo = useSelector((state) => state.user.user);
   //const forms = useSelector((state) => state.dashboard.forms);
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
@@ -37,7 +37,6 @@ export default function HomeScreen({ navigation }) {
     { title: "cdcd", answerNumber: 10, id: 1 },
     { title: "abc", answerNumber: 10, id: 1 },
   ];
-  // console.log(userToken);
 
   const renderItem = ({ item }) => (
     <FormItem
@@ -106,7 +105,7 @@ export default function HomeScreen({ navigation }) {
       handleUrl(event.url);
     });
 
-    if (!userToken) {
+    if (!userInfo) {
       navigation.replace("OnboardingScreen");
       if (!firstRender) {
         Linking.getInitialURL()
@@ -118,6 +117,8 @@ export default function HomeScreen({ navigation }) {
     } else {
       fetchForms();
     }
+
+    console.log("?????????? ", userInfo);
 
     // return () => {
     //   subscription.remove("url");
@@ -138,7 +139,7 @@ export default function HomeScreen({ navigation }) {
     );
   };
 
-  if (!userToken) {
+  if (!userInfo) {
     return notSignIn();
   } else {
     if (isLoading) {

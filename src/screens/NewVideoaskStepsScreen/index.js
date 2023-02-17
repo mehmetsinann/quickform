@@ -21,8 +21,6 @@ export default function NewVideoaskOptionsScreen(props) {
   const [isEditable, setIsEditable] = useState(false);
   const [formTitle, setFormTitle] = useState("");
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const userToken = useSelector((state) => state.userToken.token);
 
   const renderItem = ({ item, index }) => (
     <CompletedVideoStepCard videoUrl={item.videoUrl} index={index + 1} />

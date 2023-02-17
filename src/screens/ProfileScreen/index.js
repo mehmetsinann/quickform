@@ -5,33 +5,31 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { removeToken } from "../../redux/slices/tokenSlice";
+import { removeUser } from "../../redux/slices/userSlice";
 import { clearForms } from "../../redux/slices/dashboardSlice";
 import jwt_decode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { styles } from "./styles";
 import HeaderBar from "../../components/HeaderBar";
+import { Feather } from "@expo/vector-icons";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
-  const userToken = useSelector((state) => state.userToken.token);
-  const [userInfo, setUserInfo] = useState({});
-
-  useEffect(() => {
-    if (userToken) {
-      setUserInfo(jwt_decode(userToken));
-    }
-  }, []);
+  const userInfo = useSelector((state) => state.user.user);
+  const [setName, setSetName] = useState("");
+  const [setEmail, setSetEmail] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
 
   function signOut() {
     // token state silincek
-    dispatch(removeToken());
+    dispatch(removeUser());
     dispatch(clearForms());
     navigation.reset({
       index: 0,
@@ -47,10 +45,6 @@ export default function ProfileScreen({ navigation }) {
     );
   };
 
-  const headerRightButton = () => {
-    return <View></View>;
-  };
-
   return (
     <View style={styles.container}>
       <HeaderBar
@@ -64,7 +58,9 @@ export default function ProfileScreen({ navigation }) {
           <Image
             style={styles.profilePic}
             source={{
-              uri: "https://cdn.jotfor.ms/assets/img/v4/avatar/Podo-Avatar2-03.png?ssl=1",
+              uri: userInfo?.photoURL
+                ? userInfo?.photoURL
+                : "https://cdn.jotfor.ms/assets/img/v4/avatar/Podo-Avatar2-03.png?ssl=1",
             }}
           ></Image>
         </View>

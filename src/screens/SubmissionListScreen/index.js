@@ -20,7 +20,6 @@ import HeaderBar from "../../components/HeaderBar";
 
 export default function SubmissionListScreen({ route, navigation }) {
   const { formName, id } = route.params;
-  const userToken = useSelector((state) => state.userToken.token);
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
 

@@ -11,8 +11,6 @@ import { deleteForm } from "../../../redux/slices/dashboardSlice";
 // TODO :: menü optionlarını mapleyerek kullan
 const FormItem = ({ formName, submissionInfo, formId }) => {
   const navigation = useNavigation();
-  const userToken = useSelector((state) => state.userToken.token);
-  const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
 

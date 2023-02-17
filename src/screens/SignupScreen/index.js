@@ -12,19 +12,24 @@ import { Formik } from "formik";
 import { styles } from "./styles";
 import { auth } from "../../firebase/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/slices/userSlice";
 
 export default function SignupScreen({ navigation }) {
   const [isChecked, setIsChecked] = useState(false);
+  const dispatch = useDispatch();
   const emailRef = useRef();
   const passwordRef = useRef();
   //sign up işleminden sonra logine yönlendirme yapılacak
   function handleSignUp(values) {
     createUserWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        // ...
+        console.log("==========", userCredential.user);
+        dispatch(setUser(userCredential.user.providerData[0]));
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "HomeScreen" }],
+        });
       })
       .catch((error) => {
         console.log(error);

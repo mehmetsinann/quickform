@@ -33,8 +33,6 @@ export default function Navigation() {
 
   console.log(Linking.useURL());
 
-  const userToken = useSelector((state) => state.userToken.token);
-
   return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="HomeScreen">
