@@ -5,6 +5,7 @@ import {
   TextInput,
   Image,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useRef } from "react";
@@ -17,22 +18,26 @@ import { setUser } from "../../redux/slices/userSlice";
 
 export default function SignupScreen({ navigation }) {
   const [isChecked, setIsChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const emailRef = useRef();
   const passwordRef = useRef();
-  //sign up işleminden sonra logine yönlendirme yapılacak
+
   function handleSignUp(values) {
+    setIsLoading(true);
     createUserWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         console.log("==========", userCredential.user);
         dispatch(setUser(userCredential.user.providerData[0]));
+        setIsLoading(true);
         navigation.reset({
           index: 0,
           routes: [{ name: "HomeScreen" }],
         });
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
       });
   }
 
@@ -103,10 +108,18 @@ export default function SignupScreen({ navigation }) {
             </View>
 
             <TouchableOpacity
-              style={styles.signUpButton}
+              style={[
+                styles.signUpButton,
+                { backgroundColor: isLoading ? "#AEDC5D" : "#78BB07" },
+              ]}
               onPress={handleSubmit}
+              disabled={isLoading}
             >
-              <Text style={styles.singUpButtonText}>Create my account</Text>
+              {!isLoading ? (
+                <Text style={styles.singUpButtonText}>Create my account</Text>
+              ) : (
+                <ActivityIndicator color={"white"} />
+              )}
             </TouchableOpacity>
             <View
               style={{

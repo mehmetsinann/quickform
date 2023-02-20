@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import { Formik } from "formik";
 import axios from "axios";
@@ -14,24 +15,31 @@ import { useRef } from "react";
 import { styles } from "./styles";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
+import { useState } from "react";
 
 export default function LoginScreen({ navigation }) {
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const emailRef = useRef();
   const passwordRef = useRef();
 
   // console.log(token);
   function handleLogin(values) {
-    signInWithEmailAndPassword(auth, values.email, values.password).then(
-      (userCredential) => {
+    setIsLoading(true);
+    signInWithEmailAndPassword(auth, values.email, values.password)
+      .then((userCredential) => {
         console.log("==========", userCredential.user);
         dispatch(setUser(userCredential.user.providerData[0]));
+        setIsLoading(false);
         navigation.reset({
           index: 0,
           routes: [{ name: "HomeScreen" }],
         });
-      }
-    );
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setIsLoading(false);
+      });
   }
 
   return (
@@ -82,8 +90,19 @@ export default function LoginScreen({ navigation }) {
               ref={passwordRef}
             />
 
-            <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
-              <Text style={styles.loginButtonText}>Sign In</Text>
+            <TouchableOpacity
+              style={[
+                styles.loginButton,
+                { backgroundColor: isLoading ? "#AEDC5D" : "#78BB07" },
+              ]}
+              onPress={handleSubmit}
+              disabled={isLoading}
+            >
+              {!isLoading ? (
+                <Text style={styles.loginButtonText}>Sign In</Text>
+              ) : (
+                <ActivityIndicator color={"white"} />
+              )}
             </TouchableOpacity>
             <View
               style={{
@@ -95,6 +114,7 @@ export default function LoginScreen({ navigation }) {
               <Text>Don't you have an account yet?</Text>
               <TouchableOpacity
                 onPress={() => navigation.replace("SignupScreen")}
+                disabled={isLoading}
               >
                 <Text style={{ color: "#0099ff", fontWeight: "bold" }}>
                   {" "}

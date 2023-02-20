@@ -33,7 +33,6 @@ export const styles = StyleSheet.create({
   },
   loginButton: {
     borderRadius: 5,
-    backgroundColor: "#78BB07",
     height: 50,
     marginHorizontal: 30,
     justifyContent: "center",
