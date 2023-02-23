@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#fff",
+    paddingHorizontal: 8,
   },
   innerContainer: {
     flexDirection: "row",

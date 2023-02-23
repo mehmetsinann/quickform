@@ -21,6 +21,7 @@ import FillFormScreen from "../screens/FillForm";
 import AnswersPreviewScreen from "../screens/AnswersPreviewScreen";
 import * as Linking from "expo-linking";
 import { useSelector } from "react-redux";
+import CreateFormScreen from "../screens/CreateFormScreen";
 
 const Stack = createStackNavigator();
 
@@ -74,9 +75,14 @@ export default function Navigation() {
           }}
         />
         <Stack.Screen
+          name="CreateFormScreen"
+          component={CreateFormScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="NewVideoaskStepsScreen"
           component={NewVideoaskStepsScreen}
-          options={{ headerShown: false, presentation: "modal" }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="NewVideoaskScreen"

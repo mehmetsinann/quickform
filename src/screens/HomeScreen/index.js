@@ -118,8 +118,6 @@ export default function HomeScreen({ navigation }) {
       fetchForms();
     }
 
-    console.log("?????????? ", userInfo);
-
     // return () => {
     //   subscription.remove("url");
     // };
@@ -171,7 +169,7 @@ export default function HomeScreen({ navigation }) {
           {forms.length > 0 && (
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("NewVideoaskStepsScreen", {
+                navigation.navigate("CreateFormScreen", {
                   cameFrom: "HomeScreen",
                 })
               }
@@ -180,19 +178,31 @@ export default function HomeScreen({ navigation }) {
               <Entypo name="plus" size={32} color="white" />
             </TouchableOpacity>
           )}
-
-          <FlatList
-            ListEmptyComponent={<EmptyComponent />}
-            data={
-              searchValue.length > 0
-                ? forms.filter((form) => {
-                    form.title === searchValue;
-                  })
-                : forms
-            }
-            renderItem={renderItem}
-            keyExtractor={(item) => forms.indexOf(item)}
-          />
+          <Text
+            style={{
+              fontSize: 14,
+              paddingHorizontal: 16,
+              marginVertical: 20,
+              fontWeight: "400",
+            }}
+          >
+            My Forms
+          </Text>
+          {forms.length > 0 ? (
+            <FlatList
+              data={
+                searchValue.length > 0
+                  ? forms.filter((form) => {
+                      form.title === searchValue;
+                    })
+                  : forms
+              }
+              renderItem={renderItem}
+              keyExtractor={(item) => forms.indexOf(item)}
+            />
+          ) : (
+            <EmptyComponent />
+          )}
         </View>
       );
     }

@@ -20,21 +20,21 @@ import HeaderBar from "../../components/HeaderBar";
 
 export default function SubmissionListScreen({ route, navigation }) {
   const { formName, id } = route.params;
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
   // console.log(formId);
 
   // console.log(formName);
 
-  // const data = new Array(20).fill({
-  //   formUser: {
-  //     name: "John Doe",
-  //     email: "johndoe@example.com",
-  //   },
-  //   createdAt: "2022-07-28T10:42:41.976Z",
-  //   steps: ["Yes", "No", "yes", "no", "yes", "no"],
-  // });
+  const data = new Array(20).fill({
+    formUser: {
+      name: "John Doe",
+      email: "johndoe@example.com",
+    },
+    createdAt: "2022-07-28T10:42:41.976Z",
+    steps: ["Yes", "No", "yes", "no", "yes", "no"],
+  });
 
   const getSubmissionList = () => {};
 
@@ -83,7 +83,7 @@ export default function SubmissionListScreen({ route, navigation }) {
   } else {
     return (
       <View style={styles.container}>
-        <StatusBar style="light" />
+        <StatusBar style="auto" />
         <HeaderBar
           title={formName}
           backgroundColor="#249BB4"

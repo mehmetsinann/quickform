@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 100,
-    backgroundColor: "#FF6100",
+    backgroundColor: "#FF4F5A",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
@@ -59,8 +59,7 @@ export const styles = StyleSheet.create({
     color: "white",
   },
   emptyContainer: {
-    flex: 1,
-    height: height - 80,
+    height: height / 1.5,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -82,7 +81,7 @@ export const styles = StyleSheet.create({
   createButton: {
     padding: 10,
     marginTop: 15,
-    backgroundColor: "#FF6100",
+    backgroundColor: "#FF4F5A",
     borderRadius: 5,
     paddingHorizontal: 80,
   },

@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +17,8 @@ import { useEffect, useState } from "react";
 import { styles } from "./styles";
 import HeaderBar from "../../components/HeaderBar";
 import { Feather } from "@expo/vector-icons";
+import { updateCurrentUser, updateProfile } from "firebase/auth";
+import { auth } from "../../firebase/firebaseConfig";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -36,6 +39,19 @@ export default function ProfileScreen({ navigation }) {
       routes: [{ name: "OnboardingScreen" }],
     });
   }
+
+  const saveProfile = async () => {
+    const user = auth.currentUser;
+    await updateProfile(user, {
+      displayName: setName,
+    })
+      .then(() => {
+        Alert.alert("display name updated successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const headerLeftButton = () => {
     return (
@@ -74,7 +90,16 @@ export default function ProfileScreen({ navigation }) {
 
         <View style={styles.infoContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.name}>{userInfo?.name}</Text>
+            <TextInput
+              style={styles.name}
+              onFocus={() => {
+                setIsEdit(true);
+              }}
+              value={userInfo?.name}
+              onChangeText={setSetName}
+            >
+              {userInfo?.name}
+            </TextInput>
           </View>
           <View style={styles.emailContainer}>
             <Text style={styles.email}>{userInfo?.email}</Text>
@@ -90,6 +115,18 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.deleteAccountText}>Delete Account</Text>
         </TouchableOpacity>
       </View>
+
+      {isEdit &&
+      (setName.length > 0 ||
+        (setEmail.length > 0 && setEmail.includes("@"))) ? (
+        <TouchableOpacity style={styles.signOut} onPress={saveProfile}>
+          <Text style={{ color: "green", textAlign: "center", fontSize: 16 }}>
+            Save Profile
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
 
       <TouchableOpacity style={styles.signOut} onPress={signOut}>
         <Text style={{ color: "red", textAlign: "center", fontSize: 16 }}>

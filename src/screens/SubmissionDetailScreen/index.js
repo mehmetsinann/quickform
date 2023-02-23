@@ -10,9 +10,10 @@ import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { FlatList } from "react-native-gesture-handler";
 import { styles } from "./styles";
+import HeaderBar from "../../components/HeaderBar";
 
 export default function SubmissionDetailScreen({ route, navigation }) {
-  const { answers, name, email, saveTime } = route.params;
+  const { answers, name, email, saveTime, formName } = route.params;
 
   console.log(answers);
 
@@ -29,9 +30,22 @@ export default function SubmissionDetailScreen({ route, navigation }) {
     </View>
   );
 
+  const headerLeftButton = () => {
+    return (
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Ionicons name="chevron-back" size={24} color="white" />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
+      <HeaderBar
+        title={`${formName} - ${name}`}
+        backgroundColor="#249BB4"
+        leftButton={headerLeftButton}
+      />
       <View style={styles.userInfo}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.email}>{email}</Text>

@@ -7,16 +7,16 @@ export const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    marginTop: 40,
-    marginLeft: 10,
+    marginTop: 16,
     justifyContent: "center",
-    alignItems: "center",
   },
   backButton: {
     position: "absolute",
     left: 10,
     right: 0,
     width: 30,
+    flexDirection: "row",
+    alignItems: "center",
   },
   formTitleText: {
     fontSize: 20,

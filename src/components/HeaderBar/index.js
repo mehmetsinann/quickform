@@ -46,7 +46,9 @@ export const HeaderBar = ({
     return (
       <View style={[styles.mainContainer]}>
         {(leftButton && leftButton()) || <View style={{ width: 24 }}></View>}
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title} numberOfLines={1}>
+          {title}
+        </Text>
         {(rightButton && rightButton()) || <View style={{ width: 24 }}></View>}
       </View>
     );
