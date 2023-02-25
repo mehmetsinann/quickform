@@ -29,7 +29,13 @@ export default function LoginScreen({ navigation }) {
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         console.log("==========", userCredential.user);
-        dispatch(setUser(userCredential.user.providerData[0]));
+        const user = {
+          name: userCredential.user.displayName,
+          email: userCredential.user.email,
+          uid: userCredential.user.uid,
+          photoURL: userCredential.user.photoURL,
+        };
+        dispatch(setUser(user));
         setIsLoading(false);
         navigation.reset({
           index: 0,

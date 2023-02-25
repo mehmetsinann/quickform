@@ -28,6 +28,11 @@ import {
 import * as FileSystem from "expo-file-system";
 import { FileSystemUploadType } from "expo-file-system";
 import { styles } from "./styles";
+import { db } from "../../firebase/firebaseConfig";
+import { collection, doc, setDoc } from "firebase/firestore";
+
+import firebase from "firebase/app";
+import "firebase/storage";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -38,108 +43,26 @@ export default function VideoaskPreviewScreen(props) {
   const dispatch = useDispatch();
   const animatedValue = useRef(new Animated.Value(0)).current;
 
-  const formId = useSelector((state) => state.step.formId);
-
   const choices = useSelector((state) => state.step.choices);
   const step = useSelector((state) => state.step);
-
   const [visibleBlur, setVisibleBlur] = useState(false);
   const [isPreview, setPreview] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const userID = useSelector((state) => state.user.user.uid);
 
-  const saveStep = async () => {};
-
-  const toValue = () => {
-    if (step.choices.length == 1) {
-      return 350;
-    } else if (step.choices.length == 2) {
-      return 300;
-    } else if (step.choices.length == 3) {
-      return 230;
-    } else if (step.choices.length == 4) {
-      return 150;
-    } else {
-      return 0;
-    }
-  };
-  const duration = () => {
-    if (step.choices.length == 1) {
-      return 1600;
-    } else if (step.choices.length == 2) {
-      return 1300;
-    } else if (step.choices.length == 3) {
-      return 1000;
-    } else if (step.choices.length == 4) {
-      return 700;
-    } else {
-      return 0;
-    }
-  };
-
-  const startAnimationDown = () => {
-    Animated.timing(animatedValue, {
-      toValue: toValue(),
-      duration: duration(),
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const startAnimationUp = () => {
-    Animated.timing(animatedValue, {
-      toValue: 0,
-      duration: duration(),
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  // console.log(step);
-
-  const renderItem = ({ item, index }) => (
-    <AddMultipleChoiceCard
-      onChangeText={onChangeText}
-      index={index}
-      choice={choices[index]}
-      deleteChoice={_deleteChoice}
-      isPreview={isPreview}
-    />
-  );
-
-  // console.log(choices);
-
-  const _addChoice = () => {
-    dispatch(addChoice());
-  };
-
-  const onChangeText = (text, index) => {
-    dispatch(setChoice({ text, index }));
-  };
-
-  const _deleteChoice = (index) => {
-    dispatch(deleteChoice(index));
-  };
-
-  function deleteEmptyChoices(choices) {
-    const tempChoices = choices.filter((choice) => choice !== "");
-    console.log(tempChoices);
-    dispatch(setChoices(tempChoices));
-  }
-
-  console.log(step.choices);
-
-  const AddMultipleChoiceButton = () => {
-    return (
-      <View style={styles.addMultipleChoiceButtonContainer}>
-        <TouchableOpacity
-          style={styles.addMultipleChoiceButton}
-          onPress={_addChoice}
-        >
-          <Ionicons name="add" size={40} color="#C8CEED" />
-          <Text style={styles.addMultipleChoiceButtonText}>Add Choice</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  const createFormAndSaveVideo = async () => {
+    // setLoading(true);
+    // const userRef = doc(db, "users", userID);
+    // const formsCollectionRef = collection(userRef, "forms");
+    // await setDoc(formsCollectionRef)
+    //   .then(() => {
+    //     setLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setLoading(false);
+    //   });
+    // setLoading(false);
   };
 
   if (isLoading) {
@@ -194,87 +117,16 @@ export default function VideoaskPreviewScreen(props) {
                 <Text style={styles.buttonText}>Back</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.bottomButton}
-                onPress={() => {
-                  setVisibleBlur(true);
-                }}
-              >
-                <Text style={styles.buttonText}>Continue</Text>
+              <TouchableOpacity style={styles.bottomButton}>
+                <Text
+                  style={styles.buttonText}
+                  onPress={() => {
+                    createFormAndSaveVideo();
+                  }}
+                >
+                  Save
+                </Text>
               </TouchableOpacity>
-            </View>
-          )}
-
-          {visibleBlur && (
-            <View style={styles.blurView}>
-              {!isPreview && (
-                <Text style={styles.previewText}>Add Multiple Choice</Text>
-              )}
-
-              <Animated.View
-                style={{
-                  height: 640,
-                  transform: [{ translateY: animatedValue }],
-                }}
-              >
-                <FlatList
-                  data={choices}
-                  renderItem={renderItem}
-                  ListFooterComponent={() =>
-                    !isPreview &&
-                    choices.length < 4 && <AddMultipleChoiceButton />
-                  }
-                  style={styles.flatList}
-                  contentContainerStyle={{ alignItems: "center" }}
-                />
-              </Animated.View>
-              {!isPreview && (
-                <View style={styles.bottomContainer}>
-                  <TouchableOpacity
-                    style={styles.bottomButton}
-                    onPress={() => {
-                      setVisibleBlur(false);
-                      setPreview(false);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>Back</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.bottomButton}
-                    onPress={() => {
-                      // navigation.navigate("CompletedVideoaskPreviewScreen");
-                      deleteEmptyChoices(choices);
-                      startAnimationDown();
-                      setPreview(true);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>Continue</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              {isPreview && (
-                <View style={styles.bottomContainer}>
-                  <TouchableOpacity
-                    style={styles.bottomButton}
-                    onPress={() => {
-                      setPreview(false);
-                      startAnimationUp();
-                    }}
-                  >
-                    <Text style={styles.buttonText}>Back</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.bottomButton}
-                    onPress={() => {
-                      saveStep();
-                    }}
-                  >
-                    <Text style={styles.buttonText}>Continue</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
             </View>
           )}
         </View>
