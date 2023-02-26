@@ -38,6 +38,14 @@ export default function SubmissionListScreen({ route, navigation }) {
     steps: ["Yes", "No", "yes", "no", "yes", "no"],
   });
 
+  const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    setFilteredData(
+      data.filter((item) => item.formUser.name.includes(searchValue))
+    );
+  }, [searchValue]);
+
   const getSubmissionList = () => {};
 
   useEffect(() => {
@@ -121,7 +129,7 @@ export default function SubmissionListScreen({ route, navigation }) {
           </Text>
           <FlatList
             ListEmptyComponent={emptyScreen}
-            data={data.sort((a, b) => {
+            data={filteredData.sort((a, b) => {
               return new Date(b.createdAt) - new Date(a.createdAt);
             })}
             renderItem={renderItem}

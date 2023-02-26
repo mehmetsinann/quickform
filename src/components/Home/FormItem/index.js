@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteForm } from "../../../redux/slices/dashboardSlice";
 
 // TODO :: menü optionlarını mapleyerek kullan
-const FormItem = ({ formName, submissionInfo, formId }) => {
+const FormItem = ({ formName, submissionCount, formId }) => {
   const navigation = useNavigation();
 
   const [visible, setVisible] = useState(false);
@@ -52,8 +52,8 @@ const FormItem = ({ formName, submissionInfo, formId }) => {
       <View style={styles.infoContainer}>
         <Text style={styles.formName}>{formName}</Text>
         <Text style={styles.submissions}>
-          {submissionInfo != 0
-            ? `${submissionInfo} submissions`
+          {submissionCount != 0 && submissionCount
+            ? `${submissionCount} submissions`
             : "No submission yet."}
         </Text>
       </View>

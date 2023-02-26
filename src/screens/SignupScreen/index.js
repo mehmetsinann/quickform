@@ -32,6 +32,7 @@ export default function SignupScreen({ navigation }) {
           email: userCredential.user.email,
           photoURL: userCredential.user.photoURL,
           uid: userCredential.user.uid,
+          formIDs: [],
         };
         db.collection("users").doc(`${userCredential.user.uid}`).set(user);
         dispatch(setUser(user));

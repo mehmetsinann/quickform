@@ -19,6 +19,7 @@ import axios from "axios";
 import { setFirstRender, setForms } from "../../redux/slices/dashboardSlice";
 import { styles } from "./styles";
 import HeaderBar from "../../components/HeaderBar";
+import { db } from "../../firebase/firebaseConfig";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -26,22 +27,23 @@ const height = Dimensions.get("window").height;
 export default function HomeScreen({ navigation }) {
   const [isSearch, setIsSearch] = useState(false);
   const userInfo = useSelector((state) => state.user.user);
-  //const forms = useSelector((state) => state.dashboard.forms);
+  const [forms, setForms] = useState([]);
+  const [filteredForms, setFilteredForms] = useState([]);
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
   const firstRender = useSelector((state) => state.dashboard.firstRender);
   const [searchValue, setSearchValue] = useState("");
-  const forms = [
-    { title: "abc", answerNumber: 10, id: 1 },
-    { title: "bcd", answerNumber: 10, id: 1 },
-    { title: "cdcd", answerNumber: 10, id: 1 },
-    { title: "abc", answerNumber: 10, id: 1 },
-  ];
+  // const forms = [
+  //   { title: "abc", answerNumber: 10, id: 1 },
+  //   { title: "bcd", answerNumber: 10, id: 1 },
+  //   { title: "cdcd", answerNumber: 10, id: 1 },
+  //   { title: "abc", answerNumber: 10, id: 1 },
+  // ];
 
   const renderItem = ({ item }) => (
     <FormItem
       formName={item.title}
-      submissionInfo={item.answerNumber}
+      submissionCount={item?.submissionCount}
       formId={item.id}
     />
   );
@@ -123,7 +125,25 @@ export default function HomeScreen({ navigation }) {
     // };
   }, []);
 
-  const fetchForms = () => {};
+  useEffect(() => {
+    setFilteredForms(forms.filter((form) => form.title.includes(searchValue)));
+  }, [searchValue]);
+
+  const fetchForms = () => {
+    setLoading(true);
+    db.collection("forms")
+      .where("ownerID", "==", userInfo.uid)
+      .get()
+      .then((res) => {
+        const tempForms = [];
+        res.docs.forEach((form) => {
+          tempForms.push(form.data());
+        });
+        setForms(tempForms);
+        setFilteredForms(tempForms);
+        setLoading(false);
+      });
+  };
 
   const notSignIn = () => {
     return (
@@ -190,13 +210,7 @@ export default function HomeScreen({ navigation }) {
           </Text>
           {forms.length > 0 ? (
             <FlatList
-              data={
-                searchValue.length > 0
-                  ? forms.filter((form) => {
-                      form.title === searchValue;
-                    })
-                  : forms
-              }
+              data={filteredForms}
               renderItem={renderItem}
               keyExtractor={(item) => forms.indexOf(item)}
             />

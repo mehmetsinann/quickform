@@ -13,7 +13,7 @@ import { setUser } from "../../redux/slices/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useRef } from "react";
 import { styles } from "./styles";
-import { auth } from "../../firebase/firebaseConfig";
+import { auth, db } from "../../firebase/firebaseConfig";
 import { useState } from "react";
 
 export default function LoginScreen({ navigation }) {
@@ -28,18 +28,18 @@ export default function LoginScreen({ navigation }) {
     auth
       .signInWithEmailAndPassword(values.email, values.password)
       .then((userCredential) => {
-        const user = {
-          name: userCredential.user.displayName,
-          email: userCredential.user.email,
-          uid: userCredential.user.uid,
-          photoURL: userCredential.user.photoURL,
-        };
-        dispatch(setUser(user));
+        db.collection("users")
+          .doc(`${userCredential.user.uid}`)
+          .get()
+          .then((user) => {
+            const _user = user.data();
+            dispatch(setUser(_user));
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "HomeScreen" }],
+            });
+          });
         setIsLoading(false);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "HomeScreen" }],
-        });
       })
       .catch((err) => {
         console.log(err.message);

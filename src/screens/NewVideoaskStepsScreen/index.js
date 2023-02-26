@@ -18,6 +18,7 @@ import { setFormId } from "../../redux/slices/stepSlice";
 import { styles } from "./styles";
 import { useRef } from "react";
 import { db } from "../../firebase/firebaseConfig";
+import { setUser } from "../../redux/slices/userSlice";
 
 export default function NewVideoaskOptionsScreen(props) {
   const [videos, setVideos] = useState([]);
@@ -25,6 +26,7 @@ export default function NewVideoaskOptionsScreen(props) {
   const textInputRef = useRef();
   const navigation = useNavigation();
   const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
 
   const setFormID = () => {
     let s4 = () => {
@@ -52,10 +54,17 @@ export default function NewVideoaskOptionsScreen(props) {
       .then(() => {
         db.collection("users")
           .doc(`${user.uid}`)
-          .collection("forms")
-          .doc(`${formID}`)
           .set({
-            id: formID,
+            ...user,
+            formIDs: [...user.formIDs, formID],
+          })
+          .then(() => {
+            dispatch(
+              setUser({
+                ...user,
+                formIDs: [...user.formIDs, formID],
+              })
+            );
           });
       })
       .then(() => {

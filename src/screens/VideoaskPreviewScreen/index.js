@@ -38,7 +38,6 @@ export default function VideoaskPreviewScreen(props) {
   const previewVideo = React.useRef(null);
   const dispatch = useDispatch();
   const animatedValue = useRef(new Animated.Value(0)).current;
-  console.log(props.route.params.formID);
 
   const choices = useSelector((state) => state.step.choices);
   const step = useSelector((state) => state.step);

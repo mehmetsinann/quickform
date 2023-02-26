@@ -24,7 +24,7 @@ export const HeaderBar = ({
       <View style={[styles.searchContainer]}>
         <TextInput
           value={searchValue}
-          onChange={setSearchValue}
+          onChangeText={setSearchValue}
           placeholder="search"
           style={{ paddingHorizontal: 10, width: "100%" }}
           autoFocus
