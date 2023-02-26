@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import SubmissionListItem from "../../components/SubmissionList/SubmissionListItem";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -22,6 +22,8 @@ export default function SubmissionListScreen({ route, navigation }) {
   const { formName, id } = route.params;
   // const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   // console.log(formId);
 
@@ -68,6 +70,18 @@ export default function SubmissionListScreen({ route, navigation }) {
     );
   };
 
+  const headerRightButton = () => {
+    return (
+      <TouchableOpacity onPress={handleSearch}>
+        <Feather name="search" size={24} color="white" />
+      </TouchableOpacity>
+    );
+  };
+
+  const handleSearch = () => {
+    setIsSearch(true);
+  };
+
   if (!isLoading) {
     return (
       <View
@@ -88,6 +102,11 @@ export default function SubmissionListScreen({ route, navigation }) {
           title={formName}
           backgroundColor="#249BB4"
           leftButton={headerLeftButton}
+          rightButton={headerRightButton}
+          isSearch={isSearch}
+          setIsSearch={setIsSearch}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
         />
         <View style={styles.listContainer}>
           <Text

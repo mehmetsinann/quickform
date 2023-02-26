@@ -21,7 +21,7 @@ export const HeaderBar = ({
 }) => {
   const search = () => {
     return (
-      <View style={styles.searchContainer}>
+      <View style={[styles.searchContainer]}>
         <TextInput
           value={searchValue}
           onChange={setSearchValue}
@@ -36,7 +36,7 @@ export const HeaderBar = ({
           }}
           style={styles.closeSearch}
         >
-          <AntDesign name="closecircle" size={24} color="black" />
+          <AntDesign name="closecircle" size={24} color="gray" />
         </TouchableOpacity>
       </View>
     );
