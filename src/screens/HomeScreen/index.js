@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import * as Linking from "expo-linking";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { setFirstRender, setForms } from "../../redux/slices/dashboardSlice";
+
 import { styles } from "./styles";
 import HeaderBar from "../../components/HeaderBar";
 import { db } from "../../firebase/firebaseConfig";
@@ -31,7 +31,7 @@ export default function HomeScreen({ navigation }) {
   const [filteredForms, setFilteredForms] = useState([]);
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
-  const firstRender = useSelector((state) => state.dashboard.firstRender);
+
   const [searchValue, setSearchValue] = useState("");
   // const forms = [
   //   { title: "abc", answerNumber: 10, id: 1 },
@@ -109,13 +109,11 @@ export default function HomeScreen({ navigation }) {
 
     if (!userInfo) {
       navigation.replace("OnboardingScreen");
-      if (!firstRender) {
-        Linking.getInitialURL()
-          .then((url) => handleUrl(url))
-          .then(() => {
-            dispatch(setFirstRender(true));
-          });
-      }
+      Linking.getInitialURL()
+        .then((url) => handleUrl(url))
+        .then(() => {
+          dispatch(setFirstRender(true));
+        });
     } else {
       fetchForms();
     }
@@ -145,80 +143,64 @@ export default function HomeScreen({ navigation }) {
       });
   };
 
-  const notSignIn = () => {
+  if (isLoading) {
     return (
-      <View style={styles.logoContainer}>
-        <Image
-          source={require("../../../assets/images/logo.png")}
-          style={{ width: width * 0.5, height: width * 0.5 }}
-        />
-        <Text style={styles.logoText}>PlayPodo</Text>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: "white", justifyContent: "center" },
+        ]}
+      >
+        <StatusBar style="light" />
+        <ActivityIndicator size="large" color="#252D5B" />
       </View>
     );
-  };
-
-  if (!userInfo) {
-    return notSignIn();
   } else {
-    if (isLoading) {
-      return (
-        <View
-          style={[
-            styles.container,
-            { backgroundColor: "white", justifyContent: "center" },
-          ]}
-        >
-          <StatusBar style="light" />
-          <ActivityIndicator size="large" color="#252D5B" />
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.container}>
-          <StatusBar style="light" />
-          <HeaderBar
-            title={"Home"}
-            leftButton={headerLeftButton}
-            rightButton={headerRightButton}
-            isSearch={isSearch}
-            setIsSearch={setIsSearch}
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-            backgroundColor={"#0A1551"}
-          />
-          {forms.length > 0 && (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("CreateFormScreen", {
-                  cameFrom: "HomeScreen",
-                })
-              }
-              style={styles.newVideoaskButton}
-            >
-              <Entypo name="plus" size={32} color="white" />
-            </TouchableOpacity>
-          )}
-          <Text
-            style={{
-              fontSize: 14,
-              paddingHorizontal: 16,
-              marginVertical: 20,
-              fontWeight: "400",
-            }}
+    return (
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <HeaderBar
+          title={"Home"}
+          leftButton={headerLeftButton}
+          rightButton={headerRightButton}
+          isSearch={isSearch}
+          setIsSearch={setIsSearch}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          backgroundColor={"#0A1551"}
+        />
+        {forms.length > 0 && (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("CreateFormScreen", {
+                cameFrom: "HomeScreen",
+              })
+            }
+            style={styles.newVideoaskButton}
           >
-            My Forms
-          </Text>
-          {forms.length > 0 ? (
-            <FlatList
-              data={filteredForms}
-              renderItem={renderItem}
-              keyExtractor={(item) => forms.indexOf(item)}
-            />
-          ) : (
-            <EmptyComponent />
-          )}
-        </View>
-      );
-    }
+            <Entypo name="plus" size={32} color="white" />
+          </TouchableOpacity>
+        )}
+        <Text
+          style={{
+            fontSize: 14,
+            paddingHorizontal: 16,
+            marginVertical: 20,
+            fontWeight: "400",
+          }}
+        >
+          My Forms
+        </Text>
+        {forms.length > 0 ? (
+          <FlatList
+            data={filteredForms}
+            renderItem={renderItem}
+            keyExtractor={(item) => forms.indexOf(item)}
+          />
+        ) : (
+          <EmptyComponent />
+        )}
+      </View>
+    );
   }
 }

@@ -12,7 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser, setUser } from "../../redux/slices/userSlice";
-import { clearForms } from "../../redux/slices/dashboardSlice";
+
 import jwt_decode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { styles } from "./styles";
@@ -35,7 +35,6 @@ export default function ProfileScreen({ navigation }) {
   function signOut() {
     // token state silincek
     dispatch(removeUser());
-    dispatch(clearForms());
     navigation.reset({
       index: 0,
       routes: [{ name: "OnboardingScreen" }],

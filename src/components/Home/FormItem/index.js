@@ -6,7 +6,6 @@ import { styles } from "./styles";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteForm } from "../../../redux/slices/dashboardSlice";
 
 // TODO :: menü optionlarını mapleyerek kullan
 const FormItem = ({ formName, submissionCount, formId }) => {
