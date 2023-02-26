@@ -12,10 +12,8 @@ import { useState, useRef } from "react";
 import { Formik } from "formik";
 import { styles } from "./styles";
 import { auth, db } from "../../firebase/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 export default function SignupScreen({ navigation }) {
   const [isChecked, setIsChecked] = useState(false);
@@ -26,28 +24,23 @@ export default function SignupScreen({ navigation }) {
 
   function handleSignUp(values) {
     setIsLoading(true);
-    createUserWithEmailAndPassword(auth, values.email, values.password)
+    auth
+      .createUserWithEmailAndPassword(values.email, values.password)
       .then(async (userCredential) => {
-        const user = userCredential.user;
-        const usersCollection = collection(db, "users");
-        const userDoc = doc(usersCollection, userCredential.user.uid);
-        const userData = {
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
+        const user = {
+          name: userCredential.user.displayName,
+          email: userCredential.user.email,
+          photoURL: userCredential.user.photoURL,
+          uid: userCredential.user.uid,
         };
-        await setDoc(userDoc, userData);
-        dispatch(setUser(user.providerData[0]));
+        db.collection("users").doc(`${userCredential.user.uid}`).set(user);
+        dispatch(setUser(user));
         setIsLoading(true);
         navigation.reset({
           index: 0,
           routes: [{ name: "HomeScreen" }],
         });
       })
-      // .then((userCredential) => {
-      //   console.log("==========", userCredential.user);
-      // })
       .catch((err) => {
         console.log(err);
         setIsLoading(false);

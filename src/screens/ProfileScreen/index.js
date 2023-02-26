@@ -18,7 +18,7 @@ import { styles } from "./styles";
 import HeaderBar from "../../components/HeaderBar";
 import { Feather } from "@expo/vector-icons";
 import { updateCurrentUser, updateProfile } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig";
+import { auth, db } from "../../firebase/firebaseConfig";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -26,9 +26,20 @@ const height = Dimensions.get("window").height;
 export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.user);
-  const [setName, setSetName] = useState("");
-  const [setEmail, setSetEmail] = useState("");
+  const [name, setName] = useState(userInfo?.name);
+  const [email, setEmail] = useState(userInfo?.email);
   const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    db.collection("users")
+      .doc(`${userInfo?.uid}`)
+      .get()
+      .then((user) => {
+        console.log(user.data());
+        setName(user.data().name);
+        setEmail(user.data().email);
+      });
+  }, []);
 
   function signOut() {
     // token state silincek
@@ -42,14 +53,21 @@ export default function ProfileScreen({ navigation }) {
 
   const saveProfile = async () => {
     const user = auth.currentUser;
-    await updateProfile(user, {
-      displayName: setName,
-    })
-      .then(() => {
-        Alert.alert("display name updated successfully");
+    user
+      .updateProfile({
+        displayName: name,
       })
-      .catch((err) => {
-        console.log(err);
+      .then(() => {
+        db.collection("users")
+          .doc(`${userInfo.uid}`)
+          .set({
+            ...userInfo,
+            name,
+          })
+          .then(() => {
+            setIsEdit(false);
+            console.log("user name changed successfully to ", name);
+          });
       });
   };
 
@@ -95,14 +113,12 @@ export default function ProfileScreen({ navigation }) {
               onFocus={() => {
                 setIsEdit(true);
               }}
-              value={userInfo?.name}
-              onChangeText={setSetName}
-            >
-              {userInfo?.name}
-            </TextInput>
+              value={name}
+              onChangeText={setName}
+            />
           </View>
           <View style={styles.emailContainer}>
-            <Text style={styles.email}>{userInfo?.email}</Text>
+            <Text style={styles.email}>{email}</Text>
           </View>
         </View>
       </View>

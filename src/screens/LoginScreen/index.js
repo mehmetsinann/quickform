@@ -13,7 +13,6 @@ import { setUser } from "../../redux/slices/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useRef } from "react";
 import { styles } from "./styles";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import { useState } from "react";
 
@@ -26,9 +25,9 @@ export default function LoginScreen({ navigation }) {
   // console.log(token);
   function handleLogin(values) {
     setIsLoading(true);
-    signInWithEmailAndPassword(auth, values.email, values.password)
+    auth
+      .signInWithEmailAndPassword(values.email, values.password)
       .then((userCredential) => {
-        console.log("==========", userCredential.user);
         const user = {
           name: userCredential.user.displayName,
           email: userCredential.user.email,

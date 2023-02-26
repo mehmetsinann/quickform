@@ -16,7 +16,7 @@ import { styles } from "./styles";
 
 const width = Dimensions.get("window").width;
 
-export default function NewVideoaskScreen({ navigation }) {
+export default function NewVideoaskScreen({ navigation, route }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [hasAudioPermission, setHasAudioPermission] = useState(false);
   const [hasGalleryPermission, setHasGalleryPermission] = useState(false);
@@ -100,6 +100,7 @@ export default function NewVideoaskScreen({ navigation }) {
       navigation.navigate("VideoaskPreviewScreen", {
         source: result?.uri,
         cameFrom: "NewVideoaskScreen",
+        formID: route.params.formID,
       });
     }
   };
@@ -120,6 +121,7 @@ export default function NewVideoaskScreen({ navigation }) {
           navigation.navigate("VideoaskPreviewScreen", {
             source: source,
             cameFrom: "NewVideoaskScreen",
+            formID: route.params.formID,
           });
         }
       } catch (e) {

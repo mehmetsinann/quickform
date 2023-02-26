@@ -28,11 +28,7 @@ import {
 import * as FileSystem from "expo-file-system";
 import { FileSystemUploadType } from "expo-file-system";
 import { styles } from "./styles";
-import { db } from "../../firebase/firebaseConfig";
-import { collection, doc, setDoc } from "firebase/firestore";
-
-import firebase from "firebase/app";
-import "firebase/storage";
+import { db, storage } from "../../firebase/firebaseConfig";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -42,6 +38,7 @@ export default function VideoaskPreviewScreen(props) {
   const previewVideo = React.useRef(null);
   const dispatch = useDispatch();
   const animatedValue = useRef(new Animated.Value(0)).current;
+  console.log(props.route.params.formID);
 
   const choices = useSelector((state) => state.step.choices);
   const step = useSelector((state) => state.step);
@@ -50,20 +47,7 @@ export default function VideoaskPreviewScreen(props) {
   const [isLoading, setLoading] = useState(false);
   const userID = useSelector((state) => state.user.user.uid);
 
-  const createFormAndSaveVideo = async () => {
-    // setLoading(true);
-    // const userRef = doc(db, "users", userID);
-    // const formsCollectionRef = collection(userRef, "forms");
-    // await setDoc(formsCollectionRef)
-    //   .then(() => {
-    //     setLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setLoading(false);
-    //   });
-    // setLoading(false);
-  };
+  const saveVideo = async () => {};
 
   if (isLoading) {
     return (

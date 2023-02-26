@@ -17,18 +17,51 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFormId } from "../../redux/slices/stepSlice";
 import { styles } from "./styles";
 import { useRef } from "react";
+import { db } from "../../firebase/firebaseConfig";
 
 export default function NewVideoaskOptionsScreen(props) {
   const [videos, setVideos] = useState([]);
   const [formTitle, setFormTitle] = useState("");
   const textInputRef = useRef();
   const navigation = useNavigation();
+  const user = useSelector((state) => state.user.user);
+
+  const setFormID = () => {
+    let s4 = () => {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    };
+    return s4() + s4() + "-" + s4();
+  };
 
   const renderItem = ({ item, index }) => (
     <CompletedVideoStepCard videoUrl={item.videoUrl} index={index + 1} />
   );
 
-  const createForm = async () => {};
+  const createForm = async () => {
+    const formID = setFormID();
+    await db
+      .collection("forms")
+      .doc(`${formID}`)
+      .set({
+        title: formTitle,
+        ownerID: user.uid,
+        id: formID,
+      })
+      .then(() => {
+        db.collection("users")
+          .doc(`${user.uid}`)
+          .collection("forms")
+          .doc(`${formID}`)
+          .set({
+            id: formID,
+          });
+      })
+      .then(() => {
+        navigation.navigate("NewVideoaskScreen", { formID });
+      });
+  };
 
   const AddStepButton = () => {
     return (
@@ -37,7 +70,6 @@ export default function NewVideoaskOptionsScreen(props) {
         onPress={() => {
           if (formTitle.length > 2) {
             createForm();
-            navigation.navigate("NewVideoaskScreen");
           } else {
             textInputRef.current.focus();
           }
