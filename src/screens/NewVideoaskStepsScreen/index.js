@@ -50,6 +50,7 @@ export default function NewVideoaskOptionsScreen(props) {
         title: formTitle,
         ownerID: user.uid,
         id: formID,
+        questions: [],
       })
       .then(() => {
         db.collection("users")

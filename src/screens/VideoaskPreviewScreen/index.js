@@ -36,17 +36,44 @@ const height = Dimensions.get("window").height;
 export default function VideoaskPreviewScreen(props) {
   const navigation = useNavigation();
   const previewVideo = React.useRef(null);
-  const dispatch = useDispatch();
-  const animatedValue = useRef(new Animated.Value(0)).current;
-
-  const choices = useSelector((state) => state.step.choices);
-  const step = useSelector((state) => state.step);
   const [visibleBlur, setVisibleBlur] = useState(false);
   const [isPreview, setPreview] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const userID = useSelector((state) => state.user.user.uid);
 
-  const saveVideo = async () => {};
+  const saveVideo = async () => {
+    const form = (
+      await db
+        .collection("forms")
+        .where("id", "==", props.route.params.formID)
+        .get()
+    ).docs[0].data();
+
+    const storageRef = storage.ref();
+    console.log(props.route.params.source);
+    const response = await fetch(props.route.params.source);
+    const blob = await response.blob();
+    const ref = storageRef.child(
+      `${props.route.params.formID}/question-${form.questions.length + 1}`
+    );
+
+    ref
+      .put(blob)
+      .then((snapshot) => {
+        console.log("snapshot :: ", snapshot);
+        console.log("video uploaded successfully");
+      })
+      .then(async () => {
+        const downloadURL = await ref.getDownloadURL();
+        console.log("url :: ", downloadURL);
+        db.collection("forms")
+          .doc(`${props.route.params.formID}`)
+          .set({
+            ...form,
+            questions: [...form.questions, downloadURL],
+          });
+      });
+  };
 
   if (isLoading) {
     return (
@@ -104,7 +131,7 @@ export default function VideoaskPreviewScreen(props) {
                 <Text
                   style={styles.buttonText}
                   onPress={() => {
-                    createFormAndSaveVideo();
+                    saveVideo();
                   }}
                 >
                   Save
