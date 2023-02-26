@@ -7,10 +7,11 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { removeUser } from "../../redux/slices/userSlice";
+import { removeUser, setUser } from "../../redux/slices/userSlice";
 import { clearForms } from "../../redux/slices/dashboardSlice";
 import jwt_decode from "jwt-decode";
 import { useEffect, useState } from "react";
@@ -29,17 +30,7 @@ export default function ProfileScreen({ navigation }) {
   const [name, setName] = useState(userInfo?.name);
   const [email, setEmail] = useState(userInfo?.email);
   const [isEdit, setIsEdit] = useState(false);
-
-  useEffect(() => {
-    db.collection("users")
-      .doc(`${userInfo?.uid}`)
-      .get()
-      .then((user) => {
-        console.log(user.data());
-        setName(user.data().name);
-        setEmail(user.data().email);
-      });
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
   function signOut() {
     // token state silincek
@@ -52,6 +43,7 @@ export default function ProfileScreen({ navigation }) {
   }
 
   const saveProfile = async () => {
+    setIsLoading(true);
     const user = auth.currentUser;
     user
       .updateProfile({
@@ -65,8 +57,15 @@ export default function ProfileScreen({ navigation }) {
             name,
           })
           .then(() => {
+            dispatch(
+              setUser({
+                ...userInfo,
+                name,
+              })
+            );
             setIsEdit(false);
             console.log("user name changed successfully to ", name);
+            setIsLoading(false);
           });
       });
   };
@@ -132,13 +131,15 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {isEdit &&
-      (setName.length > 0 ||
-        (setEmail.length > 0 && setEmail.includes("@"))) ? (
+      {isEdit && setName.length > 0 && name !== userInfo?.name ? (
         <TouchableOpacity style={styles.signOut} onPress={saveProfile}>
-          <Text style={{ color: "green", textAlign: "center", fontSize: 16 }}>
-            Save Profile
-          </Text>
+          {!isLoading ? (
+            <Text style={{ color: "green", textAlign: "center", fontSize: 16 }}>
+              Save Profile
+            </Text>
+          ) : (
+            <ActivityIndicator />
+          )}
         </TouchableOpacity>
       ) : (
         <></>
