@@ -95,7 +95,6 @@ const FormItem = ({ formName, submissionCount, formId }) => {
               onPress={() => {
                 navigateTo("form");
               }}
-              disabled
             >
               <MaterialCommunityIcons
                 name="page-previous-outline"

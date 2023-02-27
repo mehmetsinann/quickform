@@ -1,216 +1,59 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  TextInput,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import * as Device from "expo-device";
-import * as Linking from "expo-linking";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import { Video } from "expo-av";
-import { Ionicons } from "@expo/vector-icons";
-import { setAnswers } from "../../redux/slices/answerSlice";
-import { Feather } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { db } from "../../firebase/firebaseConfig";
+import { useEffect } from "react";
 import { styles } from "./styles";
+import { Ionicons } from "@expo/vector-icons";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
-
+// TODO :: add answer onpress function (it should open the camera and when finishe the record goBack and ++visibleIndex)
 const FillFormScreen = ({ navigation, route }) => {
-  const video = React.useRef(null);
-  const [visibleChoices, setVisibleChoices] = useState(false);
-  const [visiblePlayButton, setVisiblePlayButton] = useState(false);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [title, setTitle] = useState("");
-  const [answerType, setAnswerType] = useState("");
+  const watchVideo = React.useRef(null);
+  const { formId, formName } = route.params;
+  const [visibleIndex, setVisibleIndex] = useState(0);
+  const [form, setForm] = useState();
 
-  const dispatch = useDispatch();
-
-  const [data, setData] = useState([]);
-
-  const getForm = () => {};
+  const getForm = () => {
+    db.collection("forms")
+      .doc(`${formId}`)
+      .get()
+      .then((res) => {
+        setForm(res.data());
+      });
+  };
 
   useEffect(() => {
     getForm();
   }, []);
 
-  const renderItem = ({ item, index }) => (
-    <SingleChoice index={index} item={item} />
-  );
+  const handleClose = () => {
+    navigation.goBack();
+  };
 
-  const SingleChoice = ({ index, item }) => {
-    const [isChosen, setIsChosen] = useState(false);
-    const choose = (item) => {
-      setIsChosen(true);
-      dispatch(setAnswers(item));
-      setCurrentStepIndex(currentStepIndex + 1);
-      setAnswerType("");
-
-      if (currentStepIndex === data.length - 1) {
-        navigation.navigate("AnswersPreviewScreen", {
-          formId: route.params.id,
-          formName: route.params.formName,
-        });
-      }
-
-      setIsChosen(false);
-      setVisibleChoices(false);
-      setVisiblePlayButton(false);
-    };
-    return (
-      <TouchableOpacity
-        style={[
-          styles.choiceContainer,
-          { backgroundColor: isChosen ? "green" : "#04092D" },
-        ]}
-        onPress={() => {
-          choose(item);
-        }}
-        disabled={isChosen}
-      >
-        <Text style={styles.choiceText}>{item}</Text>
+  return (
+    <View style={styles.container}>
+      <View style={styles.fillFormHeader}>
+        <View style={{ width: 30 }}></View>
+        <Text style={styles.title}>{formName}</Text>
+        <TouchableOpacity style={styles.close} onPress={handleClose}>
+          <Ionicons name="ios-close-circle" size={32} color="#C8CEED" />
+        </TouchableOpacity>
+      </View>
+      <Video
+        ref={watchVideo}
+        style={styles.video}
+        source={{ uri: form?.questions[visibleIndex] }}
+        resizeMode="cover"
+        isLooping={false}
+        shouldPlay
+        //isMuted={visibleBlur || isPreview ? true : false}
+      />
+      <TouchableOpacity style={styles.answerButton}>
+        <Text style={styles.answerText}>Answer</Text>
       </TouchableOpacity>
-    );
-  };
-
-  const AnswerTypeButtons = () => {
-    const [_text, setText] = useState("");
-
-    if (answerType === "") {
-      return (
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              setAnswerType("MultipleChoice");
-            }}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Multiple Choice</Text>
-            <Feather name="list" size={30} color="#C8CEED" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setAnswerType("Text");
-            }}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Text</Text>
-            <Ionicons name="text" size={30} color="#C8CEED" />
-          </TouchableOpacity>
-        </View>
-      );
-    } else if (answerType === "MultipleChoice") {
-      return (
-        <FlatList
-          data={data[currentStepIndex]?.choices}
-          renderItem={renderItem}
-          keyExtractor={(item) => data[currentStepIndex]?.choices.indexOf(item)}
-          style={styles.choiceList}
-        />
-      );
-    } else if (answerType === "Text") {
-      return (
-        <KeyboardAvoidingView behavior="position" style={{ zIndex: 10 }}>
-          <View style={styles.textContainer}>
-            <TextInput
-              style={styles.choiceTextInput}
-              placeholder="type here"
-              placeholderTextColor="gray"
-              multiline={true}
-              value={_text}
-              onChangeText={setText}
-            />
-            <TouchableOpacity
-              style={styles.doneButton}
-              onPress={() => {
-                dispatch(setAnswers(_text));
-                setCurrentStepIndex(currentStepIndex + 1);
-                setAnswerType("");
-
-                if (currentStepIndex === data.length - 1) {
-                  navigation.navigate("AnswersPreviewScreen", {
-                    formId: route.params.id,
-                    formName: route.params.formName,
-                  });
-                }
-
-                setVisibleChoices(false);
-                setVisiblePlayButton(false);
-              }}
-            >
-              <MaterialIcons name="done" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      );
-    }
-  };
-
-  if (data === null) {
-    return <Text>Loading</Text>;
-  } else {
-    return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Keyboard.dismiss();
-        }}
-      >
-        <View style={styles.container}>
-          <View
-            style={{
-              position: "absolute",
-              top: 32,
-              left: 20,
-              zIndex: 10,
-            }}
-          >
-            <Text style={{ color: "#efefef", fontSize: 32 }}>
-              {title} - {currentStepIndex + 1}
-            </Text>
-          </View>
-          <Video
-            ref={video}
-            style={styles.video}
-            source={{
-              uri: data[currentStepIndex]?.videoLink,
-            }}
-            resizeMode="cover"
-            // isLooping={true}
-            shouldPlay
-            onPlaybackStatusUpdate={(playbackStatus) => {
-              if (playbackStatus.didJustFinish) {
-                setVisiblePlayButton(true);
-                setVisibleChoices(true);
-              }
-            }}
-          />
-          {visibleChoices ? <AnswerTypeButtons /> : <></>}
-
-          {visiblePlayButton && (
-            <TouchableOpacity
-              style={styles.playButton}
-              onPress={() => {
-                video.current.replayAsync();
-                setVisiblePlayButton(false);
-              }}
-            >
-              <Ionicons name="play-circle" size={80} color="white" />
-            </TouchableOpacity>
-          )}
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  }
+    </View>
+  );
 };
 
 export default FillFormScreen;
