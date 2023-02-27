@@ -92,6 +92,10 @@ export default function VideoaskPreviewScreen(props) {
     return (
       <View style={[styles.container, { backgroundColor: "#252D5B" }]}>
         <ActivityIndicator size="large" color="white" />
+        <Text style={styles.videoUploadingText}>
+          The video is loading, it may take a while depending on your internet
+          speed
+        </Text>
       </View>
     );
   } else {
@@ -140,15 +144,13 @@ export default function VideoaskPreviewScreen(props) {
                 <Text style={styles.buttonText}>Back</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.bottomButton}>
-                <Text
-                  style={styles.buttonText}
-                  onPress={() => {
-                    saveVideo();
-                  }}
-                >
-                  Save
-                </Text>
+              <TouchableOpacity
+                style={styles.bottomButton}
+                onPress={() => {
+                  saveVideo();
+                }}
+              >
+                <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
             </View>
           )}

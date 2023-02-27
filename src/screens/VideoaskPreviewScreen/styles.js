@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#ecf0f1",
+    alignItems: "center",
     zIndex: 0,
   },
   video: {
@@ -61,6 +62,13 @@ export const styles = StyleSheet.create({
     width,
     height,
     zIndex: 1,
+  },
+  videoUploadingText: {
+    color: "white",
+    fontSize: 18,
+    width: "40%",
+    marginTop: 16,
+    textAlign: "center",
   },
 
   //AddMultipleChoiceScreen
