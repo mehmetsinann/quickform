@@ -19,6 +19,7 @@ const CreateFormItem = ({ text, imageSource, navigateTo }) => {
     <TouchableOpacity
       style={[styles.itemContainer]}
       onPress={navigateCreateForm}
+      disabled={text === "Classic Form"}
     >
       <Image
         source={imageSource}
@@ -27,6 +28,7 @@ const CreateFormItem = ({ text, imageSource, navigateTo }) => {
       />
       <View style={styles.textContainer}>
         <Text style={styles.text}>{text}</Text>
+        {text === "Classic Form" ? <Text>Soon</Text> : <></>}
       </View>
     </TouchableOpacity>
   );

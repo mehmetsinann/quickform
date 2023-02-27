@@ -5,6 +5,7 @@ const { width, height } = Dimensions.get("window");
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: "relative",
   },
   profileContainer: {
     // marginHorizontal: 20,
@@ -19,17 +20,17 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
   },
   profilePicContainer: {
-    width: 112,
-    height: 112,
+    width: 152,
+    height: 152,
     backgroundColor: "#091141",
-    borderRadius: 56,
+    borderRadius: 76,
     justifyContent: "center",
     alignItems: "center",
   },
   profilePic: {
-    width: 106,
-    height: 106,
-    borderRadius: 53,
+    width: 144,
+    height: 144,
+    borderRadius: 72,
     alignSelf: "center",
   },
   userInfo: {
@@ -93,5 +94,36 @@ export const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingHorizontal: 16,
     paddingVertical: 11,
+  },
+  deleteModalContainer: {
+    position: "absolute",
+    width: width - 80,
+    top: height / 2.5,
+    alignSelf: "center",
+    zIndex: 1000,
+    backgroundColor: "gray",
+    paddingVertical: 32,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+  },
+  deleteModalText: {
+    fontSize: 24,
+    textAlign: "center",
+    paddingBottom: 12,
+    color: "white",
+  },
+  deleteModalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  deleteModalButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: "white",
+    borderRadius: 8,
+    width: "40%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
