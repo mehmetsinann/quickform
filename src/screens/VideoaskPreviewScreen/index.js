@@ -39,7 +39,6 @@ export default function VideoaskPreviewScreen(props) {
   const [visibleBlur, setVisibleBlur] = useState(false);
   const [isPreview, setPreview] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const userID = useSelector((state) => state.user.user.uid);
 
   const saveVideo = async () => {
     setLoading(true);
@@ -127,7 +126,12 @@ export default function VideoaskPreviewScreen(props) {
           {!visibleBlur && (
             <View style={styles.bottomContainer}>
               <TouchableOpacity
-                style={styles.bottomButton}
+                style={[
+                  styles.bottomButton,
+                  props.route.params.cameFrom === "CompletedVideoStepCard"
+                    ? { width: "80%" }
+                    : {},
+                ]}
                 onPress={() => {
                   if (props.route.params.cameFrom === "NewVideoaskScreen") {
                     navigation.reset({
@@ -144,14 +148,18 @@ export default function VideoaskPreviewScreen(props) {
                 <Text style={styles.buttonText}>Back</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.bottomButton}
-                onPress={() => {
-                  saveVideo();
-                }}
-              >
-                <Text style={styles.buttonText}>Save</Text>
-              </TouchableOpacity>
+              {props.route.params.cameFrom !== "CompletedVideoStepCard" ? (
+                <TouchableOpacity
+                  style={styles.bottomButton}
+                  onPress={() => {
+                    saveVideo();
+                  }}
+                >
+                  <Text style={styles.buttonText}>Save</Text>
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )}
             </View>
           )}
         </View>

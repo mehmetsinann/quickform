@@ -80,7 +80,7 @@ export default function FormEditScreen({ route }) {
           <Ionicons name="chevron-back" size={30} color="#D9D9D9" />
         </TouchableOpacity>
 
-        <Text style={styles.newVideoaskText}>{formName}</Text>
+        <Text style={styles.newVideoaskText}>{formName || form?.title}</Text>
       </View>
       {isLoading ? (
         <View style={[styles.container, { justifyContent: "center" }]}>
