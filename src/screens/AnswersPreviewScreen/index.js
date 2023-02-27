@@ -29,11 +29,6 @@ const AnswersPreviewScreen = ({ navigation, route }) => {
   const userToken = useSelector((state) => state.userToken.token);
   const formId = route.params.formId;
   const [isLoading, setIsLoading] = useState(false);
-  // const answers = ["yes", "no"];
-
-  console.log(route.params);
-
-  // console.log(answers, formId);
 
   const onSubmit = async () => {};
 

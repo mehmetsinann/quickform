@@ -22,7 +22,6 @@ export default function LoginScreen({ navigation }) {
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  // console.log(token);
   function handleLogin(values) {
     setIsLoading(true);
     auth

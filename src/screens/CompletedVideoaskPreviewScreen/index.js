@@ -30,8 +30,6 @@ export default function CompletedVideoaskPreviewScreen(props) {
   const formId = useSelector((state) => state.step.formId);
   const userToken = useSelector((state) => state.userToken.token);
 
-  console.log(step);
-
   const renderItem = ({ item, index }) => (
     <SingleChoice index={index} item={item} />
   );

@@ -40,8 +40,6 @@ const FillFormScreen = ({ navigation, route }) => {
 
   const getForm = () => {};
 
-  console.log(data);
-
   useEffect(() => {
     getForm();
   }, []);
@@ -53,7 +51,6 @@ const FillFormScreen = ({ navigation, route }) => {
   const SingleChoice = ({ index, item }) => {
     const [isChosen, setIsChosen] = useState(false);
     const choose = (item) => {
-      // console.log(item);
       setIsChosen(true);
       dispatch(setAnswers(item));
       setCurrentStepIndex(currentStepIndex + 1);
@@ -69,17 +66,7 @@ const FillFormScreen = ({ navigation, route }) => {
       setIsChosen(false);
       setVisibleChoices(false);
       setVisiblePlayButton(false);
-      // setChosen(item);
-      // console.log(chosen);
-
-      // steps arrayinden kontrol et sonuncuda answers preview ekranına gönder
-      // navigation.replace("form", {
-      //   videoLink: data.videoLink,
-      //   choices: data.choices,
-      // });
-      //navigate to next video, setIsChosen to false, setChosen to null, visibleChoices to false, visiblePlayButton to false
     };
-    // console.log(item, index);
     return (
       <TouchableOpacity
         style={[
@@ -167,12 +154,8 @@ const FillFormScreen = ({ navigation, route }) => {
         </KeyboardAvoidingView>
       );
     }
-    // console.log(_text);
   };
 
-  // console.log(_text);
-
-  console.log(route.params);
   if (data === null) {
     return <Text>Loading</Text>;
   } else {

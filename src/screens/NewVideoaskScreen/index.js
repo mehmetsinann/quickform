@@ -111,7 +111,7 @@ export default function NewVideoaskScreen({ navigation, route }) {
       try {
         const options = {
           quality: Camera.Constants.VideoQuality["480"],
-          maxDuration: 60,
+          maxDuration: 10,
         };
         const videoRecordPromise = cameraRef.recordAsync(options);
         if (videoRecordPromise) {

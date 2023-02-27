@@ -36,8 +36,6 @@ const FormItem = ({ formName, submissionCount, formId }) => {
     }
   };
 
-  // console.log(formId);
-
   return (
     <TouchableOpacity
       style={styles.container}

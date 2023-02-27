@@ -26,7 +26,6 @@ export default function SubmissionDetailScreen({ route, navigation }) {
     <View key={index} style={styles.row}>
       <Text style={styles.label}>Question {index + 1}</Text>
       <Text style={styles.answer}>{item.choice}</Text>
-      {/* {console.log(item, index)} */}
     </View>
   );
 

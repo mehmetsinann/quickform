@@ -14,11 +14,8 @@ export default function CompletedVideoStepCard({ videoUrl, index, form }) {
   const previewVideo = React.useRef(null);
   const navigation = useNavigation();
 
-  console.log(videoUrl, index);
-
   const deleteStep = async () => {
     const deletedQuestion = form.questions.splice(index - 1, 1);
-    console.log(deletedQuestion, form.questions);
     db.collection("forms")
       .doc(`${form.id}`)
       .set({
@@ -28,7 +25,7 @@ export default function CompletedVideoStepCard({ videoUrl, index, form }) {
       .then(() => {
         const videoPath = `${form.id}/question-${index}`;
         const videoRef = storage.ref(videoPath);
-        videoRef.delete().then(() => console.log("video deleted successfully"));
+        videoRef.delete();
       })
       .then(() => {
         console.log("question deleted successfully :: ", deletedQuestion);

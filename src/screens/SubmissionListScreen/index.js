@@ -25,10 +25,6 @@ export default function SubmissionListScreen({ route, navigation }) {
   const [isSearch, setIsSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
-  // console.log(formId);
-
-  // console.log(formName);
-
   const data = new Array(20).fill({
     formUser: {
       name: "John Doe",

@@ -5,7 +5,6 @@ import moment from "moment";
 
 const SubmissionListItem = ({ data, formName }) => {
   const navigation = useNavigation();
-  // console.log(data);
   const time = moment(data.createdAt);
   const now = moment();
   const timeAgo = Math.abs(time.diff(now, "days"));

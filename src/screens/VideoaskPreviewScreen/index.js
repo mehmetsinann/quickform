@@ -50,7 +50,6 @@ export default function VideoaskPreviewScreen(props) {
     ).docs[0].data();
 
     const storageRef = storage.ref();
-    console.log(props.route.params.source);
     const response = await fetch(props.route.params.source);
     const blob = await response.blob();
     const ref = storageRef.child(
@@ -60,7 +59,6 @@ export default function VideoaskPreviewScreen(props) {
     ref
       .put(blob)
       .then((snapshot) => {
-        console.log("snapshot :: ", snapshot);
         console.log("video uploaded successfully");
       })
       .then(async () => {

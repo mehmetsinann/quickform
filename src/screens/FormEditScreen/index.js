@@ -32,8 +32,6 @@ export default function FormEditScreen({ route }) {
 
   console.log("formID :: ", formId);
 
-  // console.log(data.videUrl);
-
   const renderItem = ({ item, index }) => (
     <CompletedVideoStepCard
       videoUrl={item}
