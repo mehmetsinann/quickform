@@ -42,6 +42,7 @@ export default function VideoaskPreviewScreen(props) {
   const userID = useSelector((state) => state.user.user.uid);
 
   const saveVideo = async () => {
+    setLoading(true);
     const form = (
       await db
         .collection("forms")
@@ -72,6 +73,18 @@ export default function VideoaskPreviewScreen(props) {
             ...form,
             questions: [...form.questions, downloadURL],
           });
+      })
+      .then(() => {
+        setLoading(false);
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: "FormEditScreen",
+              params: { formId: props.route.params.formID },
+            },
+          ],
+        });
       });
   };
 

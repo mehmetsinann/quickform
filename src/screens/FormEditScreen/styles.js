@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    marginTop: 40,
+    marginTop: 16,
     marginLeft: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -22,7 +22,6 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
-    marginLeft: 40,
     color: "#D9D9D9",
   },
   editButton: {

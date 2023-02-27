@@ -7,20 +7,39 @@ import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { db, storage } from "../../firebase/firebaseConfig";
+import { deleteObject } from "firebase/storage";
 
-export default function CompletedVideoStepCard({
-  videoUrl,
-  index,
-  stepId,
-  formId,
-}) {
+export default function CompletedVideoStepCard({ videoUrl, index, form }) {
   const previewVideo = React.useRef(null);
   const navigation = useNavigation();
-  const userToken = useSelector((state) => state.userToken.token);
 
-  console.log(videoUrl, index, stepId);
+  console.log(videoUrl, index);
 
-  const deleteStep = async () => {};
+  const deleteStep = async () => {
+    const deletedQuestion = form.questions.splice(index - 1, 1);
+    console.log(deletedQuestion, form.questions);
+    db.collection("forms")
+      .doc(`${form.id}`)
+      .set({
+        ...form,
+        questions: form.questions,
+      })
+      .then(() => {
+        const videoPath = `${form.id}/question-${index}`;
+        const videoRef = storage.ref(videoPath);
+        videoRef.delete().then(() => console.log("video deleted successfully"));
+      })
+      .then(() => {
+        console.log("question deleted successfully :: ", deletedQuestion);
+        navigation.navigate("FormEditScreen", {
+          source: videoUrl,
+          cameFrom: "HomeScreen",
+          formName: form.title,
+          formId: form.id,
+        });
+      });
+  };
 
   return (
     <View style={styles.container}>

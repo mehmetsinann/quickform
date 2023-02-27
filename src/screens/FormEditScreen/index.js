@@ -7,6 +7,7 @@ import {
   Text,
   StatusBar,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
@@ -16,6 +17,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setFormId } from "../../redux/slices/stepSlice";
 import { styles } from "./styles";
+import { db } from "../../firebase/firebaseConfig";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -23,26 +25,29 @@ const height = Dimensions.get("window").height;
 export default function FormEditScreen({ route }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { id } = route.params;
+  const { formId, formName } = route.params;
   const [steps, setSteps] = useState([]);
-  const [title, setTitle] = useState("");
-  const userToken = useSelector((state) => state.userToken.token);
   const [isLoading, setLoading] = useState(false);
+  const [form, setForm] = useState(null);
 
-  console.log(id);
+  console.log("formID :: ", formId);
 
   // console.log(data.videUrl);
 
   const renderItem = ({ item, index }) => (
     <CompletedVideoStepCard
-      videoUrl={item.videoLink}
+      videoUrl={item}
       index={index + 1}
-      stepId={item._id}
-      formId={id}
+      formId={formId}
+      form={form}
     />
   );
 
-  const getForm = async () => {};
+  const getForm = async () => {
+    const _form = (await db.collection("forms").doc(`${formId}`).get()).data();
+    setForm(_form);
+    setSteps(_form.questions);
+  };
 
   useEffect(() => {
     getForm();
@@ -53,8 +58,8 @@ export default function FormEditScreen({ route }) {
       <TouchableOpacity
         style={styles.addStepButton}
         onPress={() => {
-          dispatch(setFormId(id));
-          navigation.navigate("NewVideoaskScreen", { formId: id });
+          dispatch(setFormId(formId));
+          navigation.navigate("NewVideoaskScreen", { formID: formId });
         }}
       >
         <Entypo name="plus" size={50} color="black" />
@@ -64,7 +69,7 @@ export default function FormEditScreen({ route }) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
@@ -75,10 +80,7 @@ export default function FormEditScreen({ route }) {
           <Ionicons name="chevron-back" size={30} color="#D9D9D9" />
         </TouchableOpacity>
 
-        <Text style={styles.newVideoaskText}>{title}</Text>
-        <TouchableOpacity style={styles.editButton}>
-          <Feather name="edit" size={25} color="#D9D9D9" />
-        </TouchableOpacity>
+        <Text style={styles.newVideoaskText}>{formName}</Text>
       </View>
       {isLoading ? (
         <View style={[styles.container, { justifyContent: "center" }]}>
@@ -93,6 +95,6 @@ export default function FormEditScreen({ route }) {
           style={styles.flatList}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 }

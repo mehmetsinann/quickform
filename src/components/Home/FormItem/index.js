@@ -18,7 +18,7 @@ const FormItem = ({ formName, submissionCount, formId }) => {
   };
 
   const navigateTo = (screen) => {
-    navigation.navigate(`${screen}`, { formName, id: formId });
+    navigation.navigate(`${screen}`, { formName, formId });
     toggleBottomNavigationView();
   };
 
@@ -108,18 +108,18 @@ const FormItem = ({ formName, submissionCount, formId }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.sheetOptionsItem, { opacity: 0.5 }]}
+              style={[styles.sheetOptionsItem]}
               onPress={() => {
                 navigateTo("FormEditScreen");
               }}
-              disabled
+              // disabled
             >
               <MaterialCommunityIcons
                 name="square-edit-outline"
                 size={20}
                 color="white"
               />
-              <Text style={styles.sheetOptionsText}>Edit (soon)</Text>
+              <Text style={styles.sheetOptionsText}>Edit</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
