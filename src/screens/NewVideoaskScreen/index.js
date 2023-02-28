@@ -120,7 +120,8 @@ export default function NewVideoaskScreen({ navigation, route }) {
 
           navigation.navigate("VideoaskPreviewScreen", {
             source: source,
-            cameFrom: "NewVideoaskScreen",
+            cameFrom:
+              route.params.cameFrom === "form" ? "form" : "NewVideoaskScreen",
             formID: route.params.formID,
           });
         }

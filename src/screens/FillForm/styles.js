@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
     alignItems: "center",
+    backgroundColor: "#ecf0f1",
   },
   fillFormHeader: {
     width,
@@ -46,6 +47,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,
+    zIndex: 999,
   },
   answerText: {
     fontSize: 28,

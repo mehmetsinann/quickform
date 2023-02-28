@@ -91,7 +91,7 @@ const FormItem = ({ formName, submissionCount, formId }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.sheetOptionsItem, { opacity: 0.5 }]}
+              style={[styles.sheetOptionsItem]}
               onPress={() => {
                 navigateTo("form");
               }}
@@ -101,7 +101,7 @@ const FormItem = ({ formName, submissionCount, formId }) => {
                 size={20}
                 color="white"
               />
-              <Text style={styles.sheetOptionsText}>Fill Out (soon)</Text>
+              <Text style={styles.sheetOptionsText}>Fill Out</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

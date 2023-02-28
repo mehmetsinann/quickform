@@ -112,7 +112,7 @@ export default function HomeScreen({ navigation }) {
       Linking.getInitialURL()
         .then((url) => handleUrl(url))
         .then(() => {
-          dispatch(setFirstRender(true));
+          //dispatch(setFirstRender(true));
         });
     } else {
       fetchForms();

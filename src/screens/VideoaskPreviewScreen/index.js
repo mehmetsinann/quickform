@@ -29,6 +29,7 @@ import * as FileSystem from "expo-file-system";
 import { FileSystemUploadType } from "expo-file-system";
 import { styles } from "./styles";
 import { db, storage } from "../../firebase/firebaseConfig";
+import { setAnswers } from "../../redux/slices/answerSlice";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -39,6 +40,7 @@ export default function VideoaskPreviewScreen(props) {
   const [visibleBlur, setVisibleBlur] = useState(false);
   const [isPreview, setPreview] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const saveVideo = async () => {
     setLoading(true);
@@ -53,7 +55,7 @@ export default function VideoaskPreviewScreen(props) {
     const response = await fetch(props.route.params.source);
     const blob = await response.blob();
     const ref = storageRef.child(
-      `${props.route.params.formID}/question-${form.questions.length + 1}`
+      `forms/${props.route.params.formID}/question-${form.questions.length + 1}`
     );
 
     ref
@@ -150,7 +152,15 @@ export default function VideoaskPreviewScreen(props) {
                 <TouchableOpacity
                   style={styles.bottomButton}
                   onPress={() => {
-                    saveVideo();
+                    if (props.route.params.cameFrom === "form") {
+                      dispatch(setAnswers(props.route.params.source));
+                      navigation.navigate("form", {
+                        formId: props.route.params.formID,
+                        index: "+1",
+                      });
+                    } else {
+                      saveVideo();
+                    }
                   }}
                 >
                   <Text style={styles.buttonText}>Save</Text>

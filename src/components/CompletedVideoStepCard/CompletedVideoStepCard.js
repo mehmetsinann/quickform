@@ -10,7 +10,12 @@ import { useSelector } from "react-redux";
 import { db, storage } from "../../firebase/firebaseConfig";
 import { deleteObject } from "firebase/storage";
 
-export default function CompletedVideoStepCard({ videoUrl, index, form }) {
+export default function CompletedVideoStepCard({
+  videoUrl,
+  index,
+  form,
+  isLast,
+}) {
   const previewVideo = React.useRef(null);
   const navigation = useNavigation();
 
@@ -67,16 +72,22 @@ export default function CompletedVideoStepCard({ videoUrl, index, form }) {
         >
           {index}
         </Text>
-        <TouchableOpacity onPress={deleteStep} style={styles.deleteIcon}>
-          <AntDesign name="delete" size={24} color="white" />
-        </TouchableOpacity>
+        {form ? (
+          <TouchableOpacity onPress={deleteStep} style={styles.deleteIcon}>
+            <AntDesign name="delete" size={24} color="white" />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </TouchableOpacity>
-      <Ionicons
-        name="ellipsis-vertical"
-        size={30}
-        color="gray"
-        style={{ alignSelf: "center" }}
-      />
+      {!form && !isLast && (
+        <Ionicons
+          name="ellipsis-vertical"
+          size={30}
+          color="gray"
+          style={{ alignSelf: "center" }}
+        />
+      )}
     </View>
   );
 }
