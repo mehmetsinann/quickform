@@ -2,6 +2,7 @@ import React from "react";
 import { Video } from "expo-av";
 import { useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   Text,
@@ -25,7 +26,7 @@ const FillFormScreen = ({ navigation, route }) => {
   const answers = useSelector((state) => state.answer.answers);
   const user = useSelector((state) => state.user.user);
   const [submissionID, setSubmissionID] = useState(null);
-  const [downloadableURLs, setDownloadableURLs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getForm = () => {
     db.collection("forms")
@@ -75,6 +76,7 @@ const FillFormScreen = ({ navigation, route }) => {
   };
 
   const saveAnswers = async () => {
+    setIsLoading(true);
     const storageRef = storage.ref();
     const promises = answers.map(async (url, index) => {
       const response = await fetch(url);
@@ -103,66 +105,79 @@ const FillFormScreen = ({ navigation, route }) => {
       })
       .then(() => {
         dispatch(clearAnswers());
+        setIsLoading(false);
         navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] });
       });
   };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.fillFormHeader}>
-        <View style={{ width: 30 }}></View>
-        <Text style={styles.title}>{form?.title || formName}</Text>
-        <TouchableOpacity style={styles.close} onPress={handleClose}>
-          <Ionicons name="ios-close-circle" size={32} color="#C8CEED" />
-        </TouchableOpacity>
+  if (isLoading) {
+    return (
+      <View style={[styles.loadingContainer, { backgroundColor: "#252D5B" }]}>
+        <ActivityIndicator size="large" color="white" />
+        <Text style={styles.videoUploadingText}>
+          Your submission is saving, it may take a while depending on your
+          internet speed
+        </Text>
       </View>
-      {visibleIndex < form?.questions.length ? (
-        <Video
-          ref={watchVideo}
-          style={styles.video}
-          source={{ uri: form?.questions[visibleIndex] }}
-          resizeMode="cover"
-          isLooping={true}
-          shouldPlay
-          //isMuted={visibleBlur || isPreview ? true : false}
-        />
-      ) : (
-        <FlatList
-          data={answers}
-          renderItem={renderItem}
-          style={{
-            zIndex: 1000,
-            flex: 1,
-            marginTop: Dimensions.get("window").height / 5,
-            paddingHorizontal: 64,
-          }}
-        />
-      )}
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <View style={styles.fillFormHeader}>
+          <View style={{ width: 30 }}></View>
+          <Text style={styles.title}>{form?.title || formName}</Text>
+          <TouchableOpacity style={styles.close} onPress={handleClose}>
+            <Ionicons name="ios-close-circle" size={32} color="#C8CEED" />
+          </TouchableOpacity>
+        </View>
+        {visibleIndex < form?.questions.length ? (
+          <Video
+            ref={watchVideo}
+            style={styles.video}
+            source={{ uri: form?.questions[visibleIndex] }}
+            resizeMode="cover"
+            isLooping={true}
+            shouldPlay
+            //isMuted={visibleBlur || isPreview ? true : false}
+          />
+        ) : (
+          <FlatList
+            data={answers}
+            renderItem={renderItem}
+            style={{
+              zIndex: 1000,
+              flex: 1,
+              marginTop: Dimensions.get("window").height / 5,
+              paddingHorizontal: 64,
+            }}
+          />
+        )}
 
-      {visibleIndex <= form?.questions.length - 1 ? (
-        <TouchableOpacity
-          style={styles.answerButton}
-          onPress={() => {
-            navigation.navigate("NewVideoaskScreen", {
-              cameFrom: "form",
-              formID: formId,
-            });
-          }}
-        >
-          <Text style={styles.answerText}>Answer</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          style={styles.answerButton}
-          onPress={() => {
-            saveAnswers();
-          }}
-        >
-          <Text style={styles.answerText}>Save Answers</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+        {visibleIndex <= form?.questions.length - 1 ? (
+          <TouchableOpacity
+            style={styles.answerButton}
+            onPress={() => {
+              navigation.navigate("NewVideoaskScreen", {
+                cameFrom: "form",
+                formID: formId,
+              });
+            }}
+          >
+            <Text style={styles.answerText}>Answer</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.answerButton}
+            onPress={() => {
+              saveAnswers();
+            }}
+          >
+            <Text style={styles.answerText}>Save Answers</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  }
 };
 
 export default FillFormScreen;

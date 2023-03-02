@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     position: "relative",
     alignItems: "center",
     backgroundColor: "#ecf0f1",
+    justifyContent: "center",
   },
   fillFormHeader: {
     width,
@@ -47,10 +48,24 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,
-    zIndex: 999,
+    zIndex: 10000,
   },
   answerText: {
     fontSize: 28,
     color: "white",
+  },
+  videoUploadingText: {
+    color: "white",
+    fontSize: 18,
+    width: "40%",
+    marginTop: 16,
+    textAlign: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#ecf0f1",
+    alignItems: "center",
+    zIndex: 0,
   },
 });

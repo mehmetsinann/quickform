@@ -80,7 +80,7 @@ export default function CompletedVideoStepCard({
           <></>
         )}
       </TouchableOpacity>
-      {!form && !isLast && (
+      {!isLast && (
         <Ionicons
           name="ellipsis-vertical"
           size={30}
