@@ -59,12 +59,6 @@ const FillFormScreen = ({ navigation, route }) => {
     _setSubmissionID();
   }, []);
 
-  const handleClose = () => {
-    navigation.goBack();
-    dispatch(clearAnswers());
-    setVisibleIndex(0);
-  };
-
   // console.log(answers, visibleIndex);
 
   const renderItem = ({ item, index }) => {
@@ -121,7 +115,9 @@ const FillFormScreen = ({ navigation, route }) => {
     const handleBack = () => {
       dispatch(clearAnswers());
       navigation.goBack();
+      setVisibleIndex(0);
     };
+
     return (
       <TouchableOpacity onPress={handleBack}>
         <Ionicons name="chevron-back" size={24} color="white" />

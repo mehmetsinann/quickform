@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.emptyText2}>Your forms will appear here.</Text>
         <TouchableOpacity
           style={styles.createButton}
-          onPress={() => navigation.navigate("NewVideoaskStepsScreen")}
+          onPress={() => navigation.navigate("CreateFormScreen")}
         >
           <Text style={styles.createButtonText}>CREATE FORM</Text>
         </TouchableOpacity>
@@ -181,16 +181,32 @@ export default function HomeScreen({ navigation }) {
             <Entypo name="plus" size={32} color="white" />
           </TouchableOpacity>
         )}
-        <Text
+        <View
           style={{
-            fontSize: 14,
+            flexDirection: "row",
+            justifyContent: "space-between",
             paddingHorizontal: 16,
-            marginVertical: 20,
-            fontWeight: "400",
+            paddingVertical: 12,
           }}
         >
-          My Forms
-        </Text>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "400",
+            }}
+          >
+            My Forms
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              fetchForms();
+            }}
+            style={{ flexDirection: "row", alignItems: "center" }}
+          >
+            <Text style={{ marginRight: 4 }}>Sync Data</Text>
+            <Feather name="refresh-cw" size={16} color="black" />
+          </TouchableOpacity>
+        </View>
         {forms.length > 0 ? (
           <FlatList
             data={filteredForms}
