@@ -17,32 +17,48 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { styles } from "./styles";
 import HeaderBar from "../../components/HeaderBar";
+import { db } from "../../firebase/firebaseConfig";
 
 export default function SubmissionListScreen({ route, navigation }) {
-  const { formName, id } = route.params;
-  // const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const { formName, formId } = route.params;
+  const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
-  const data = new Array(20).fill({
-    formUser: {
-      name: "John Doe",
-      email: "johndoe@example.com",
-    },
-    createdAt: "2022-07-28T10:42:41.976Z",
-    steps: ["Yes", "No", "yes", "no", "yes", "no"],
-  });
+  // const data = new Array(20).fill({
+  //   formUser: {
+  //     name: "John Doe",
+  //     email: "johndoe@example.com",
+  //   },
+  //   createdAt: "2022-07-28T10:42:41.976Z",
+  //   steps: ["Yes", "No", "yes", "no", "yes", "no"],
+  // });
 
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     setFilteredData(
-      data.filter((item) => item.formUser.name.includes(searchValue))
+      data.filter((item) => item?.formUser?.name?.includes(searchValue))
     );
   }, [searchValue]);
 
-  const getSubmissionList = () => {};
+  const getSubmissionList = () => {
+    setLoading(true);
+    db.collection("forms")
+      .doc(formId)
+      .collection("submissions")
+      .get()
+      .then((querySnapshot) => {
+        const submissions = [];
+        querySnapshot.forEach((doc) => {
+          submissions.push(doc.data());
+        });
+        setData(submissions);
+        setFilteredData(submissions);
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     getSubmissionList();
@@ -86,7 +102,7 @@ export default function SubmissionListScreen({ route, navigation }) {
     setIsSearch(true);
   };
 
-  if (!isLoading) {
+  if (isLoading) {
     return (
       <View
         style={[
@@ -125,9 +141,7 @@ export default function SubmissionListScreen({ route, navigation }) {
           </Text>
           <FlatList
             ListEmptyComponent={emptyScreen}
-            data={filteredData.sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-            })}
+            data={filteredData}
             renderItem={renderItem}
             style={{ paddingHorizontal: 16 }}
           />

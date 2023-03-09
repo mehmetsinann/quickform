@@ -16,6 +16,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAnswers, setAnswers } from "../../redux/slices/answerSlice";
 import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
+import HeaderBar from "../../components/HeaderBar";
+import moment from "moment";
 
 const FillFormScreen = ({ navigation, route }) => {
   const watchVideo = React.useRef(null);
@@ -100,14 +102,31 @@ const FillFormScreen = ({ navigation, route }) => {
       .set({
         id: submissionID,
         formId,
-        ownerId: user?.uid,
+        user: {
+          name: user.name,
+          email: user.email,
+          uid: user.uid,
+        },
         urls: downloadURLs,
+        createdAt: moment.now(),
       })
       .then(() => {
         dispatch(clearAnswers());
         setIsLoading(false);
         navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] });
       });
+  };
+
+  const headerLeftButton = () => {
+    const handleBack = () => {
+      dispatch(clearAnswers());
+      navigation.goBack();
+    };
+    return (
+      <TouchableOpacity onPress={handleBack}>
+        <Ionicons name="chevron-back" size={24} color="white" />
+      </TouchableOpacity>
+    );
   };
 
   if (isLoading) {
@@ -123,13 +142,11 @@ const FillFormScreen = ({ navigation, route }) => {
   } else {
     return (
       <View style={styles.container}>
-        <View style={styles.fillFormHeader}>
-          <View style={{ width: 30 }}></View>
-          <Text style={styles.title}>{form?.title || formName}</Text>
-          <TouchableOpacity style={styles.close} onPress={handleClose}>
-            <Ionicons name="ios-close-circle" size={32} color="#C8CEED" />
-          </TouchableOpacity>
-        </View>
+        <HeaderBar
+          title={formName || form?.title}
+          leftButton={headerLeftButton}
+          backgroundColor={"#0A1551"}
+        />
         {visibleIndex < form?.questions.length ? (
           <Video
             ref={watchVideo}
@@ -146,9 +163,7 @@ const FillFormScreen = ({ navigation, route }) => {
             renderItem={renderItem}
             style={{
               zIndex: 1000,
-              flex: 1,
               marginTop: Dimensions.get("window").height / 5,
-              paddingHorizontal: 64,
             }}
           />
         )}

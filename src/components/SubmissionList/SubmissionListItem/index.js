@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 
 const SubmissionListItem = ({ data, formName }) => {
+  console.log("aaa", data, formName);
   const navigation = useNavigation();
   const time = moment(data.createdAt);
   const now = moment();
@@ -12,8 +13,8 @@ const SubmissionListItem = ({ data, formName }) => {
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("SubmissionDetailScreen", {
-          name: data.formUser?.name,
-          email: data.formUser?.email,
+          name: data.user?.name,
+          email: data.user?.email,
           saveTime: data?.createdAt,
           answers: data?.steps,
           formName: formName,
@@ -21,14 +22,14 @@ const SubmissionListItem = ({ data, formName }) => {
       }}
       style={styles.container}
     >
-      {!data.formUser ? (
+      {!data.user ? (
         <View style={styles.infoUser}>
           <Text style={styles.name}>Anonymous user</Text>
         </View>
       ) : (
         <View style={styles.infoUser}>
-          <Text style={styles.name}>{data?.formUser.name}</Text>
-          <Text style={styles.email}>{data?.formUser.email}</Text>
+          <Text style={styles.name}>{data?.user.name}</Text>
+          <Text style={styles.email}>{data?.user.email}</Text>
         </View>
       )}
 
