@@ -140,14 +140,19 @@ const FillFormScreen = ({ navigation, route }) => {
       </View>
     );
   } else {
+    const isPreview = visibleIndex < form?.questions.length;
     return (
       <View style={styles.container}>
         <HeaderBar
-          title={formName || form?.title}
+          title={
+            isPreview
+              ? `${form?.title} - Q${visibleIndex + 1}`
+              : `${form?.title} - Preview`
+          }
           leftButton={headerLeftButton}
           backgroundColor={"#0A1551"}
         />
-        {visibleIndex < form?.questions.length ? (
+        {isPreview ? (
           <Video
             ref={watchVideo}
             style={styles.video}
@@ -168,7 +173,7 @@ const FillFormScreen = ({ navigation, route }) => {
           />
         )}
 
-        {visibleIndex <= form?.questions.length - 1 ? (
+        {isPreview ? (
           <TouchableOpacity
             style={styles.answerButton}
             onPress={() => {

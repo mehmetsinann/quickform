@@ -4,7 +4,6 @@ import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 
 const SubmissionListItem = ({ data, formName }) => {
-  console.log("aaa", data, formName);
   const navigation = useNavigation();
   const time = moment(data.createdAt);
   const now = moment();
@@ -16,7 +15,7 @@ const SubmissionListItem = ({ data, formName }) => {
           name: data.user?.name,
           email: data.user?.email,
           saveTime: data?.createdAt,
-          answers: data?.steps,
+          answers: data?.urls,
           formName: formName,
         });
       }}

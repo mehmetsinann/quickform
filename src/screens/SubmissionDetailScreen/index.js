@@ -11,6 +11,7 @@ import moment from "moment";
 import { FlatList } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import HeaderBar from "../../components/HeaderBar";
+import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
 
 export default function SubmissionDetailScreen({ route, navigation }) {
   const { answers, name, email, saveTime, formName } = route.params;
@@ -23,10 +24,11 @@ export default function SubmissionDetailScreen({ route, navigation }) {
   const submissionDate = temp[0] + ":" + temp[1];
 
   const renderItem = ({ item, index }) => (
-    <View key={index} style={styles.row}>
-      <Text style={styles.label}>Question {index + 1}</Text>
-      <Text style={styles.answer}>{item.choice}</Text>
-    </View>
+    <CompletedVideoStepCard
+      videoUrl={item}
+      index={index + 1}
+      isLast={index === answers.length - 1}
+    />
   );
 
   const headerLeftButton = () => {
@@ -57,6 +59,7 @@ export default function SubmissionDetailScreen({ route, navigation }) {
         data={answers}
         renderItem={renderItem}
         keyExtractor={(item) => answers.indexOf(item)}
+        style={{ marginTop: 20 }}
       />
     </View>
   );
