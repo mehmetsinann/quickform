@@ -133,7 +133,10 @@ export default function VideoaskPreviewScreen(props) {
                     : {},
                 ]}
                 onPress={() => {
-                  if (props.route.params.cameFrom === "NewVideoaskScreen") {
+                  if (
+                    props.route.params.cameFrom === "NewVideoaskScreen" ||
+                    props.route.params.cameFrom === "form"
+                  ) {
                     navigation.reset({
                       index: 0,
                       routes: [{ name: "NewVideoaskScreen" }],
@@ -154,6 +157,7 @@ export default function VideoaskPreviewScreen(props) {
                   onPress={() => {
                     if (props.route.params.cameFrom === "form") {
                       dispatch(setAnswers(props.route.params.source));
+                      props.route.params.setShouldPlay(true);
                       navigation.navigate("form", {
                         formId: props.route.params.formID,
                         index: "+1",

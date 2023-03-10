@@ -39,7 +39,7 @@ export default function SubmissionListScreen({ route, navigation }) {
 
   useEffect(() => {
     setFilteredData(
-      data.filter((item) => item?.formUser?.name?.includes(searchValue))
+      data.filter((item) => item?.user?.name?.includes(searchValue))
     );
   }, [searchValue]);
 

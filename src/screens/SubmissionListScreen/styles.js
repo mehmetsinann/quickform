@@ -59,4 +59,7 @@ export const styles = StyleSheet.create({
   backButton: {
     marginTop: 6,
   },
+  listContainer: {
+    flex: 1,
+  },
 });

@@ -29,6 +29,7 @@ const FillFormScreen = ({ navigation, route }) => {
   const user = useSelector((state) => state.user.user);
   const [submissionID, setSubmissionID] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [shouldPlay, setShouldPlay] = useState(true);
 
   const getForm = () => {
     db.collection("forms")
@@ -106,6 +107,11 @@ const FillFormScreen = ({ navigation, route }) => {
       })
       .then(() => {
         dispatch(clearAnswers());
+        db.collection("forms")
+          .doc(`${formId}`)
+          .update({
+            submissionCount: form?.submissionCount + 1 || 1,
+          });
         setIsLoading(false);
         navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] });
       });
@@ -155,8 +161,8 @@ const FillFormScreen = ({ navigation, route }) => {
             source={{ uri: form?.questions[visibleIndex] }}
             resizeMode="cover"
             isLooping={true}
-            shouldPlay
-            //isMuted={visibleBlur || isPreview ? true : false}
+            shouldPlay={shouldPlay}
+            volume={1}
           />
         ) : (
           <FlatList
@@ -164,7 +170,7 @@ const FillFormScreen = ({ navigation, route }) => {
             renderItem={renderItem}
             style={{
               zIndex: 1000,
-              marginTop: Dimensions.get("window").height / 5,
+              marginTop: Dimensions.get("window").height / 10,
             }}
           />
         )}
@@ -173,9 +179,11 @@ const FillFormScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={styles.answerButton}
             onPress={() => {
+              setShouldPlay(false);
               navigation.navigate("NewVideoaskScreen", {
                 cameFrom: "form",
                 formID: formId,
+                setShouldPlay,
               });
             }}
           >

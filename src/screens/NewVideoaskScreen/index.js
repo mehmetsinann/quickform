@@ -123,6 +123,7 @@ export default function NewVideoaskScreen({ navigation, route }) {
             cameFrom:
               route.params.cameFrom === "form" ? "form" : "NewVideoaskScreen",
             formID: route.params.formID,
+            setShouldPlay: route.params.setShouldPlay,
           });
         }
       } catch (e) {
