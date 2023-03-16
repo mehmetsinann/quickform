@@ -99,8 +99,10 @@ export default function NewVideoaskScreen({ navigation, route }) {
       console.log(result);
       navigation.navigate("VideoaskPreviewScreen", {
         source: result?.uri,
-        cameFrom: "NewVideoaskScreen",
+        cameFrom:
+          route.params.cameFrom === "form" ? "form" : "NewVideoaskScreen",
         formID: route.params.formID,
+        setShouldPlay: route.params.setShouldPlay,
       });
     }
   };

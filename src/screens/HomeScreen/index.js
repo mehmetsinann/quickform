@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.emptyText2}>Your forms will appear here.</Text>
         <TouchableOpacity
           style={styles.createButton}
-          onPress={() => navigation.navigate("CreateFormScreen")}
+          onPress={() => navigation.navigate("NewVideoaskStepsScreen")}
         >
           <Text style={styles.createButtonText}>CREATE FORM</Text>
         </TouchableOpacity>
@@ -172,7 +172,7 @@ export default function HomeScreen({ navigation }) {
         {forms.length > 0 && (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("CreateFormScreen", {
+              navigation.navigate("NewVideoaskStepsScreen", {
                 cameFrom: "HomeScreen",
               })
             }
