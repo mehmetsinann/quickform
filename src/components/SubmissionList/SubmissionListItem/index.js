@@ -1,13 +1,16 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+
 import moment from "moment";
+
+import { styles } from "./styles";
 
 const SubmissionListItem = ({ data, formName }) => {
   const navigation = useNavigation();
   const time = moment(data.createdAt);
   const now = moment();
   const timeAgo = Math.abs(time.diff(now, "days"));
+
   return (
     <TouchableOpacity
       onPress={() => {

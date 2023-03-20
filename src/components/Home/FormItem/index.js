@@ -2,12 +2,11 @@ import { useState } from "react";
 import { Text, View, TouchableOpacity, Image, Share } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BottomSheet } from "react-native-btr";
-import { styles } from "./styles";
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
 
-// TODO :: menü optionlarını mapleyerek kullan
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+
+import { styles } from "./styles";
+
 const FormItem = ({ formName, submissionCount, formId }) => {
   const navigation = useNavigation();
 

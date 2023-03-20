@@ -1,25 +1,25 @@
 import { StatusBar } from "expo-status-bar";
 import {
-  StyleSheet,
   Text,
   TouchableOpacity,
-  SafeAreaView,
   FlatList,
   View,
   Dimensions,
   ActivityIndicator,
   Image,
 } from "react-native";
-import FormItem from "../../components/Home/FormItem";
-import { Entypo, Feather } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
-import * as Linking from "expo-linking";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { useEffect, useState } from "react";
+
+import * as Linking from "expo-linking";
+import { Entypo, Feather } from "@expo/vector-icons";
+
+import HeaderBar from "../../components/HeaderBar";
+import FormItem from "../../components/Home/FormItem";
+
+import { db } from "../../firebase/firebaseConfig";
 
 import { styles } from "./styles";
-import HeaderBar from "../../components/HeaderBar";
-import { db } from "../../firebase/firebaseConfig";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;

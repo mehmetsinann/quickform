@@ -1,6 +1,5 @@
 import {
   View,
-  StyleSheet,
   FlatList,
   TouchableOpacity,
   Text,
@@ -8,17 +7,18 @@ import {
   TextInput,
   SafeAreaView,
 } from "react-native";
-import React, { useState } from "react";
-import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
-import { Ionicons, Entypo, Feather } from "@expo/vector-icons";
+import React, { useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setFormId } from "../../redux/slices/stepSlice";
-import { styles } from "./styles";
-import { useRef } from "react";
+
+import { Ionicons, Entypo } from "@expo/vector-icons";
+
+import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
+
 import { db } from "../../firebase/firebaseConfig";
 import { setUser } from "../../redux/slices/userSlice";
+
+import { styles } from "./styles";
 
 export default function NewVideoaskOptionsScreen(props) {
   const [videos, setVideos] = useState([]);

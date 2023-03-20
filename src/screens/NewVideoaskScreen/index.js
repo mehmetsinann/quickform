@@ -1,20 +1,13 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-} from "react-native";
+import { Text, View, TouchableOpacity, Image, Dimensions } from "react-native";
+import { useEffect, useState } from "react";
+
 import { Camera } from "expo-camera";
 import { Audio } from "expo-av";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-import { useEffect, useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { styles } from "./styles";
 
-const width = Dimensions.get("window").width;
+import { styles } from "./styles";
 
 export default function NewVideoaskScreen({ navigation, route }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);

@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { styles } from "./styles";
+
 import { AntDesign } from "@expo/vector-icons";
+
+import { styles } from "./styles";
 
 export const HeaderBar = ({
   title,

@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   TouchableOpacity,
   View,
   Dimensions,
@@ -7,28 +6,18 @@ import {
   FlatList,
 } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+
 import { Video } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import * as FileSystem from "expo-file-system";
-import { FileSystemUploadType } from "expo-file-system";
-import { clearStep } from "../../redux/slices/stepSlice";
+
 import { styles } from "./styles";
-
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
-
-//https://1761-139-179-202-18.ngrok.io/
 
 export default function CompletedVideoaskPreviewScreen(props) {
   const navigation = useNavigation();
   const previewVideo = React.useRef(null);
-  const dispatch = useDispatch();
   const step = useSelector((state) => state.step);
-  const formId = useSelector((state) => state.step.formId);
-  const userToken = useSelector((state) => state.userToken.token);
 
   const renderItem = ({ item, index }) => (
     <SingleChoice index={index} item={item} />

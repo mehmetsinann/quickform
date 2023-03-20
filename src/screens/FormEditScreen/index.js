@@ -1,6 +1,5 @@
 import {
   View,
-  StyleSheet,
   Dimensions,
   FlatList,
   TouchableOpacity,
@@ -10,14 +9,15 @@ import {
   SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
-import { Ionicons, Entypo, Feather } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { setFormId } from "../../redux/slices/stepSlice";
-import { styles } from "./styles";
+
+import { Ionicons, Entypo } from "@expo/vector-icons";
+
+import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
 import { db } from "../../firebase/firebaseConfig";
+
+import { styles } from "./styles";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -56,7 +56,6 @@ export default function FormEditScreen({ route }) {
       <TouchableOpacity
         style={styles.addStepButton}
         onPress={() => {
-          dispatch(setFormId(formId));
           navigation.navigate("NewVideoaskScreen", { formID: formId });
         }}
       >

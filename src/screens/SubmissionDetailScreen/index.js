@@ -1,17 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { FlatList } from "react-native-gesture-handler";
-import { styles } from "./styles";
+
 import HeaderBar from "../../components/HeaderBar";
 import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
+
+import { styles } from "./styles";
 
 export default function SubmissionDetailScreen({ route, navigation }) {
   const { answers, name, email, saveTime, formName } = route.params;

@@ -1,29 +1,25 @@
 import {
-  StyleSheet,
   Text,
   View,
   Dimensions,
   Image,
   TouchableOpacity,
   TextInput,
-  Alert,
   ActivityIndicator,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeUser, setUser } from "../../redux/slices/userSlice";
 
-import jwt_decode from "jwt-decode";
-import { useEffect, useState } from "react";
-import { styles } from "./styles";
-import HeaderBar from "../../components/HeaderBar";
-import { Feather } from "@expo/vector-icons";
-import { updateCurrentUser, updateProfile } from "firebase/auth";
-import { auth, db, storage } from "../../firebase/firebaseConfig";
+import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { Feather } from "@expo/vector-icons";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+import { removeUser, setUser } from "../../redux/slices/userSlice";
+import { auth, db, storage } from "../../firebase/firebaseConfig";
+
+import HeaderBar from "../../components/HeaderBar";
+
+import { styles } from "./styles";
 
 export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();

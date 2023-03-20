@@ -1,14 +1,13 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { styles } from "./styles";
-import { Video } from "expo-av";
 import { useNavigation } from "@react-navigation/native";
+
+import { Video } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import axios from "axios";
-import { useSelector } from "react-redux";
 import { db, storage } from "../../firebase/firebaseConfig";
-import { deleteObject } from "firebase/storage";
+
+import { styles } from "./styles";
 
 export default function CompletedVideoStepCard({
   videoUrl,

@@ -1,11 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
+import { Text, View, Image } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { useFonts } from "expo-font";
 import { styles } from "./styles";
-
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
 
 const slides = [
   {

@@ -1,35 +1,21 @@
 import {
   View,
-  StyleSheet,
   Dimensions,
   TouchableOpacity,
   Text,
-  FlatList,
-  Animated,
-  Easing,
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
 } from "react-native";
 import { Video } from "expo-av";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 
-import AddMultipleChoiceCard from "../../components/AddMultipleChoiceCard/AddMultipleChoiceCard";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addChoice,
-  setChoice,
-  deleteChoice,
-  clearStep,
-  setChoices,
-} from "../../redux/slices/stepSlice";
-import * as FileSystem from "expo-file-system";
-import { FileSystemUploadType } from "expo-file-system";
-import { styles } from "./styles";
 import { db, storage } from "../../firebase/firebaseConfig";
 import { setAnswers } from "../../redux/slices/answerSlice";
+
+import { styles } from "./styles";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;

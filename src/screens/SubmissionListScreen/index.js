@@ -1,23 +1,21 @@
 import { StatusBar } from "expo-status-bar";
 import {
-  StyleSheet,
   Text,
   View,
-  SafeAreaView,
   FlatList,
   TouchableOpacity,
   Image,
-  Dimensions,
   ActivityIndicator,
 } from "react-native";
-import SubmissionListItem from "../../components/SubmissionList/SubmissionListItem";
-import { Ionicons, Feather } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { styles } from "./styles";
+import { Ionicons, Feather } from "@expo/vector-icons";
+
+import SubmissionListItem from "../../components/SubmissionList/SubmissionListItem";
 import HeaderBar from "../../components/HeaderBar";
+
 import { db } from "../../firebase/firebaseConfig";
+
+import { styles } from "./styles";
 
 export default function SubmissionListScreen({ route, navigation }) {
   const { formName, formId } = route.params;

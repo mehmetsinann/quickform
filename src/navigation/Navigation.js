@@ -3,8 +3,6 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 import SubmissionListScreen from "../screens/SubmissionListScreen";
 import FormEditScreen from "../screens/FormEditScreen";
@@ -18,9 +16,7 @@ import SubmissionDetailScreen from "../screens/SubmissionDetailScreen";
 import VideoaskPreviewScreen from "../screens/VideoaskPreviewScreen";
 import NewVideoaskStepsScreen from "../screens/NewVideoaskStepsScreen";
 import FillFormScreen from "../screens/FillForm";
-import AnswersPreviewScreen from "../screens/AnswersPreviewScreen";
 import * as Linking from "expo-linking";
-import { useSelector } from "react-redux";
 import CreateFormScreen from "../screens/CreateFormScreen";
 
 const Stack = createStackNavigator();
@@ -103,11 +99,6 @@ export default function Navigation() {
         <Stack.Screen
           name="form"
           component={FillFormScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AnswersPreviewScreen"
-          component={AnswersPreviewScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

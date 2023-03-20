@@ -3,17 +3,17 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  Image,
-  SafeAreaView,
   ActivityIndicator,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useState, useRef } from "react";
-import { Formik } from "formik";
-import { styles } from "./styles";
-import { auth, db } from "../../firebase/firebaseConfig";
 import { useDispatch } from "react-redux";
+import { Formik } from "formik";
+import { Ionicons } from "@expo/vector-icons";
+
+import { auth, db } from "../../firebase/firebaseConfig";
 import { setUser } from "../../redux/slices/userSlice";
+
+import { styles } from "./styles";
 
 export default function SignupScreen({ navigation }) {
   const [isChecked, setIsChecked] = useState(false);

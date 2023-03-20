@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -7,14 +6,15 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from "react-native";
+import { useState, useRef } from "react";
+
+import { useDispatch } from "react-redux";
 import { Formik } from "formik";
-import axios from "axios";
+
 import { setUser } from "../../redux/slices/userSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { useRef } from "react";
-import { styles } from "./styles";
 import { auth, db } from "../../firebase/firebaseConfig";
-import { useState } from "react";
+
+import { styles } from "./styles";
 
 export default function LoginScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
