@@ -40,11 +40,13 @@ export default function HomeScreen({ navigation }) {
   //   { title: "abc", answerNumber: 10, id: 1 },
   // ];
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <FormItem
+      key={index}
       formName={item.title}
       submissionCount={item?.submissionCount}
       formId={item.id}
+      refreshPage={fetchForms}
     />
   );
 
@@ -115,7 +117,7 @@ export default function HomeScreen({ navigation }) {
           //dispatch(setFirstRender(true));
         });
     } else {
-      fetchForms();
+      fetchForms(true);
     }
 
     // return () => {
@@ -127,8 +129,8 @@ export default function HomeScreen({ navigation }) {
     setFilteredForms(forms.filter((form) => form.title.includes(searchValue)));
   }, [searchValue]);
 
-  const fetchForms = () => {
-    setLoading(true);
+  const fetchForms = (loading) => {
+    setLoading(loading);
     db.collection("forms")
       .where("ownerID", "==", userInfo.uid)
       .get()
@@ -199,7 +201,7 @@ export default function HomeScreen({ navigation }) {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              fetchForms();
+              fetchForms(true);
             }}
             style={{ flexDirection: "row", alignItems: "center" }}
           >
@@ -208,11 +210,7 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         {forms.length > 0 ? (
-          <FlatList
-            data={filteredForms}
-            renderItem={renderItem}
-            keyExtractor={(item) => forms.indexOf(item)}
-          />
+          <FlatList data={filteredForms} renderItem={renderItem} />
         ) : (
           <EmptyComponent />
         )}

@@ -6,11 +6,18 @@ import { BottomSheet } from "react-native-btr";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 import { styles } from "./styles";
+import { db, storage } from "../../../firebase/firebaseConfig";
+import { useDispatch, useSelector } from "react-redux";
 
-const FormItem = ({ formName, submissionCount, formId }) => {
+import { setUser } from "../../../redux/slices/userSlice";
+
+const FormItem = ({ formName, submissionCount, formId, refreshPage }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
+
+  const user = useSelector((state) => state.user.user);
 
   const toggleBottomNavigationView = () => {
     setVisible(!visible);
@@ -21,7 +28,99 @@ const FormItem = ({ formName, submissionCount, formId }) => {
     toggleBottomNavigationView();
   };
 
-  const _deleteForm = () => {};
+  const _deleteForm = () => {
+    db.collection("forms")
+      .doc(`${formId}`)
+      .delete()
+      .then(() => {
+        db.collection("forms")
+          .doc(`${formId}`)
+          .collection("submissions")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              doc.ref.delete();
+            });
+          });
+      })
+      .then(() => {
+        console.log("Form deleted!");
+        db.collection("users")
+          .doc(`${user.uid}`)
+          .set({
+            ...user,
+            formIDs: user.formIDs.filter((id) => id !== formId),
+          })
+          .then(() => {
+            dispatch(
+              setUser({
+                ...user,
+                formIDs: user.formIDs.filter((id) => id !== formId),
+              })
+            );
+          })
+          .then(() => {
+            const videosRef = storage.ref(`forms/${formId}`);
+
+            videosRef
+              .listAll()
+              .then((res) => {
+                res.items.forEach((itemRef) => {
+                  itemRef
+                    .delete()
+                    .then(() => {
+                      console.log("Video deleted successfully!");
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .then(async () => {
+            const submissionIDs = [];
+            await db
+              .collection("forms")
+              .doc(`${formId}`)
+              .collection("submissions")
+              .get()
+              .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                  submissionIDs.push(doc.id);
+                });
+              });
+            const folderRef = storage.ref(`submissions/${formId}`);
+
+            submissionIDs.forEach((id) => {
+              folderRef
+                .child(`${id}`)
+                .listAll()
+                .then((res) => {
+                  res.items.forEach(async (itemRef) => {
+                    await itemRef
+                      .delete()
+                      .then(() => {
+                        console.log("Video deleted successfully!");
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  });
+                });
+            });
+          })
+          .then(() => {
+            console.log("Videos deleted");
+          });
+      })
+      .then(() => {
+        toggleBottomNavigationView();
+        refreshPage(false);
+      });
+  };
 
   const onShare = async () => {
     try {
@@ -128,13 +227,12 @@ const FormItem = ({ formName, submissionCount, formId }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.sheetOptionsItem, { opacity: 0.5 }]}
+              style={[styles.sheetOptionsItem]}
               onPress={_deleteForm}
-              disabled
             >
               <MaterialCommunityIcons name="delete" size={20} color="#FF4948" />
               <Text style={[styles.sheetOptionsText, { color: "#FF4948" }]}>
-                Delete (soon)
+                Delete
               </Text>
             </TouchableOpacity>
           </View>

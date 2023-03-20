@@ -27,7 +27,7 @@ export default function CompletedVideoStepCard({
         questions: form.questions,
       })
       .then(() => {
-        const videoPath = `${form.id}/question-${index}`;
+        const videoPath = `forms/${form.id}/question-${index}`;
         const videoRef = storage.ref(videoPath);
         videoRef.delete();
       })
