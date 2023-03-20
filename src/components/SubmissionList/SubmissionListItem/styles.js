@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     paddingVertical: 19,
-    borderBottomWidth: 1,
     borderBottomColor: "#dfdfdf",
     flexDirection: "row",
     justifyContent: "space-between",

@@ -62,8 +62,13 @@ export default function SubmissionListScreen({ route, navigation }) {
     getSubmissionList();
   }, []);
 
-  const renderItem = ({ item }) => (
-    <SubmissionListItem data={item} formName={formName} />
+  const renderItem = ({ item, index }) => (
+    <SubmissionListItem
+      key={index}
+      data={item}
+      formName={formName}
+      isLast={index === filteredData.length - 1}
+    />
   );
 
   const emptyScreen = () => {

@@ -5,7 +5,7 @@ import moment from "moment";
 
 import { styles } from "./styles";
 
-const SubmissionListItem = ({ data, formName }) => {
+const SubmissionListItem = ({ data, formName, isLast }) => {
   const navigation = useNavigation();
   const time = moment(data.createdAt);
   const now = moment();
@@ -22,7 +22,7 @@ const SubmissionListItem = ({ data, formName }) => {
           formName: formName,
         });
       }}
-      style={styles.container}
+      style={[styles.container, { borderBottomWidth: isLast ? 0 : 1 }]}
     >
       {!data.user ? (
         <View style={styles.infoUser}>
