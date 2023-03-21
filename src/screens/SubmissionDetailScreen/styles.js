@@ -26,12 +26,22 @@ export const styles = StyleSheet.create({
     color: "white",
     marginLeft: 18,
   },
-  userInfo: {
+  infoContainer: {
     width: "100%",
     paddingHorizontal: 12,
     borderBottomColor: "#dfdfdf",
     borderBottomWidth: 1,
     paddingVertical: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  userInfo: {
+    flexDirection: "column",
+  },
+  deleteButton: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   name: {
     fontSize: 17,

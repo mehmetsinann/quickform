@@ -5,7 +5,7 @@ import moment from "moment";
 
 import { styles } from "./styles";
 
-const SubmissionListItem = ({ data, formName, isLast }) => {
+const SubmissionListItem = ({ data, formName, isLast, refreshSubmissions }) => {
   const navigation = useNavigation();
   const time = moment(data.createdAt);
   const now = moment();
@@ -20,6 +20,9 @@ const SubmissionListItem = ({ data, formName, isLast }) => {
           saveTime: data?.createdAt,
           answers: data?.urls,
           formName: formName,
+          formId: data?.formId,
+          submissionId: data?.id,
+          refreshSubmissions: refreshSubmissions,
         });
       }}
       style={[styles.container, { borderBottomWidth: isLast ? 0 : 1 }]}

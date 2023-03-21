@@ -68,6 +68,7 @@ export default function SubmissionListScreen({ route, navigation }) {
       data={item}
       formName={formName}
       isLast={index === filteredData.length - 1}
+      refreshSubmissions={getSubmissionList}
     />
   );
 

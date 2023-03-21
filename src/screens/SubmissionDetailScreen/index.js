@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { Text, TouchableOpacity, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { FlatList } from "react-native-gesture-handler";
 
@@ -8,11 +8,20 @@ import HeaderBar from "../../components/HeaderBar";
 import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
 
 import { styles } from "./styles";
+import { db, storage } from "../../firebase/firebaseConfig";
+import firebase from "firebase";
 
 export default function SubmissionDetailScreen({ route, navigation }) {
-  const { answers, name, email, saveTime, formName } = route.params;
-
-  console.log(answers);
+  const {
+    answers,
+    name,
+    email,
+    saveTime,
+    formName,
+    formId,
+    submissionId,
+    refreshSubmissions,
+  } = route.params;
 
   const date = moment(saveTime).toLocaleString();
 
@@ -35,6 +44,42 @@ export default function SubmissionDetailScreen({ route, navigation }) {
     );
   };
 
+  const deleteSubmission = () => {
+    db.collection("forms")
+      .doc(`${formId}`)
+      .collection("submissions")
+      .doc(`${submissionId}`)
+      .delete()
+      .then(() => {
+        const videosPath = storage.ref(`submissions/${formId}/${submissionId}`);
+        videosPath
+          .listAll()
+          .then((res) => {
+            res.items.forEach((itemRef) => {
+              itemRef
+                .delete()
+                .then(() => {
+                  console.log("Deleted");
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            });
+          })
+          .then(() => {
+            db.collection("forms")
+              .doc(`${formId}`)
+              .update({
+                submissionCount: firebase.firestore.FieldValue.increment(-1),
+              });
+          })
+          .then(() => {
+            refreshSubmissions();
+            navigation.goBack();
+          });
+      });
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -43,9 +88,20 @@ export default function SubmissionDetailScreen({ route, navigation }) {
         backgroundColor="#249BB4"
         leftButton={headerLeftButton}
       />
-      <View style={styles.userInfo}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.email}>{email}</Text>
+      <View style={styles.infoContainer}>
+        <View style={styles.userInfo}>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.email}>{email}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={deleteSubmission}
+        >
+          <MaterialCommunityIcons name="delete" size={20} color="#FF4948" />
+          <Text style={[styles.sheetOptionsText, { color: "#FF4948" }]}>
+            Delete
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Submission Date</Text>
