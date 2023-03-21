@@ -10,9 +10,8 @@ import {
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { Feather } from "@expo/vector-icons";
 
 import { removeUser, setUser } from "../../redux/slices/userSlice";
 import { auth, db, storage } from "../../firebase/firebaseConfig";
@@ -26,7 +25,9 @@ export default function ProfileScreen({ navigation }) {
   const userInfo = useSelector((state) => state.user.user);
   const [name, setName] = useState(userInfo?.name);
   const [email, setEmail] = useState(userInfo?.email);
-  const [isEdit, setIsEdit] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [isEdit, setIsEdit] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
 
@@ -60,7 +61,7 @@ export default function ProfileScreen({ navigation }) {
                 name,
               })
             );
-            setIsEdit(false);
+            setIsEdit("");
             console.log("user name changed successfully to ", name);
             setIsLoading(false);
           });
@@ -138,6 +139,21 @@ export default function ProfileScreen({ navigation }) {
     });
   };
 
+  const updatePassword = () => {
+    const user = auth.currentUser;
+    user
+      .updatePassword(newPassword)
+      .then(() => {
+        setNewPassword("");
+        setShowNewPassword(false);
+        setIsEdit("");
+        signOut();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const deleteModal = () => {
     return (
       <View style={styles.deleteModalContainer}>
@@ -146,16 +162,16 @@ export default function ProfileScreen({ navigation }) {
         </Text>
         <View style={styles.deleteModalButtonContainer}>
           <TouchableOpacity
-            style={[styles.deleteModalButton, { backgroundColor: "green" }]}
-            onPress={deletePhoto}
-          >
-            <Text style={{ color: "white" }}>Yes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
             style={[styles.deleteModalButton, { backgroundColor: "red" }]}
             onPress={() => setIsDeleteModal(false)}
           >
             <Text style={{ color: "white" }}>No</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.deleteModalButton, { backgroundColor: "green" }]}
+            onPress={deletePhoto}
+          >
+            <Text style={{ color: "white" }}>Yes</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -188,9 +204,12 @@ export default function ProfileScreen({ navigation }) {
       />
       <View style={styles.profileContainer}>
         <TouchableOpacity
-          style={styles.profilePicContainer}
+          style={{ position: "absolute", top: 12, left: 12 }}
           onPress={pickImage}
         >
+          <MaterialIcons name="system-update-tv" size={24} color="blue" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.profilePicContainer} disabled>
           <Image
             style={styles.profilePic}
             source={{
@@ -198,26 +217,18 @@ export default function ProfileScreen({ navigation }) {
                 ? userInfo?.photoURL
                 : "https://cdn.jotfor.ms/assets/img/v4/avatar/Podo-Avatar2-03.png?ssl=1",
             }}
-          ></Image>
-          {userInfo?.photoURL ? (
-            <TouchableOpacity
-              style={{
-                position: "absolute",
-                top: 2,
-                right: 2,
-                zIndex: 2,
-                backgroundColor: "black",
-                borderRadius: 20,
-                padding: 6,
-              }}
-              onPress={handleRemovePic}
-            >
-              <Feather name="trash-2" size={24} color="red" />
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
+          />
         </TouchableOpacity>
+        {userInfo?.photoURL ? (
+          <TouchableOpacity
+            style={{ position: "absolute", top: 12, right: 12 }}
+            onPress={handleRemovePic}
+          >
+            <Feather name="trash-2" size={24} color="red" />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </View>
 
       <View style={styles.userInfo}>
@@ -231,7 +242,7 @@ export default function ProfileScreen({ navigation }) {
             <TextInput
               style={styles.name}
               onFocus={() => {
-                setIsEdit(true);
+                setIsEdit("username");
               }}
               value={name}
               onChangeText={setName}
@@ -244,19 +255,69 @@ export default function ProfileScreen({ navigation }) {
       </View>
 
       <View style={styles.editContainer}>
-        <TouchableOpacity style={styles.changePasswordContainer}>
-          <Text style={styles.changePasswordText}>Change Password</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.deleteAccountContainer}>
-          <Text style={styles.deleteAccountText}>Delete Account</Text>
+        <TouchableOpacity
+          style={styles.changePasswordContainer}
+          onPress={() => {
+            setIsEdit("password");
+          }}
+        >
+          {isEdit !== "password" ? (
+            <Text style={styles.changePasswordText}>Change Password</Text>
+          ) : (
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                style={{ width: "85%" }}
+                onChangeText={setNewPassword}
+                value={newPassword}
+                secureTextEntry={!showNewPassword}
+                placeholder="New Password"
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  setShowNewPassword(!showNewPassword);
+                }}
+                style={{ paddingRight: 10 }}
+              >
+                <Feather
+                  name={showNewPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="black"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsEdit("");
+                  setNewPassword("");
+                }}
+              >
+                <Ionicons name="close-circle" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 
-      {isEdit && setName.length > 0 && name !== userInfo?.name ? (
+      {isEdit === "username" &&
+      setName.length > 0 &&
+      name !== userInfo?.name ? (
         <TouchableOpacity style={styles.signOut} onPress={saveProfile}>
           {!isLoading ? (
             <Text style={{ color: "green", textAlign: "center", fontSize: 16 }}>
               Save Profile
+            </Text>
+          ) : (
+            <ActivityIndicator />
+          )}
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
+
+      {isEdit === "password" && newPassword.length > 5 ? (
+        <TouchableOpacity style={styles.signOut} onPress={updatePassword}>
+          {!isLoading ? (
+            <Text style={{ color: "green", textAlign: "center", fontSize: 16 }}>
+              Save Password
             </Text>
           ) : (
             <ActivityIndicator />

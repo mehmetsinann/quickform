@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 11,
   },
   emailLabel: {
-    paddingTop: 11,
+    paddingTop: 16,
   },
   nameContainer: {
     paddingBottom: 11,
@@ -74,11 +74,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 11,
   },
-  changePasswordContainer: {
-    paddingBottom: 11,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f3f3f3",
-  },
+  changePasswordContainer: {},
   deleteAccountContainer: {
     paddingTop: 11,
   },

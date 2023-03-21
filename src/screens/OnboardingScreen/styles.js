@@ -16,14 +16,14 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 36,
     textAlign: "center",
-    marginTop: 40,
+    marginTop: 20,
     fontFamily: "HandleeRegular",
   },
   text: {
     color: "white",
     fontSize: 17,
     textAlign: "center",
-    marginTop: 50,
+    marginTop: 20,
   },
   image: {
     width,

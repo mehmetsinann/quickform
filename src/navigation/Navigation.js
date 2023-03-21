@@ -68,11 +68,11 @@ export default function Navigation() {
           component={FormEditScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="CreateFormScreen"
           component={CreateFormScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen
           name="NewVideoaskStepsScreen"
           component={NewVideoaskStepsScreen}
