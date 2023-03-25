@@ -7,7 +7,9 @@ import {
   Dimensions,
   FlatList,
   Text,
+  TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { db, storage } from "../../firebase/firebaseConfig";
@@ -31,6 +33,9 @@ const FillFormScreen = ({ navigation, route }) => {
   const [submissionID, setSubmissionID] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [shouldPlay, setShouldPlay] = useState(true);
+  const [isUserInfoModalVisible, setIsUserInfoModalVisible] = useState(false);
+  const [userInfoName, setUserInfoName] = useState(user?.name || "");
+  const [userInfoEmail, setUserInfoEmail] = useState(user?.email || "");
 
   const getForm = () => {
     db.collection("forms")
@@ -99,9 +104,9 @@ const FillFormScreen = ({ navigation, route }) => {
         id: submissionID,
         formId,
         user: {
-          name: user.name,
-          email: user.email,
-          uid: user.uid,
+          name: userInfoName,
+          email: userInfoEmail,
+          uid: user?.uid || "anonymous",
         },
         urls: downloadURLs,
         createdAt: moment.now(),
@@ -129,6 +134,46 @@ const FillFormScreen = ({ navigation, route }) => {
       <TouchableOpacity onPress={handleBack}>
         <Ionicons name="chevron-back" size={24} color="white" />
       </TouchableOpacity>
+    );
+  };
+
+  const userInfoModal = () => {
+    return (
+      <View style={styles.userInfoModal}>
+        <TouchableOpacity
+          onPress={() => setIsUserInfoModalVisible(false)}
+          style={styles.modalCloseIcon}
+        >
+          <Ionicons name="close" size={24} color="white" />
+        </TouchableOpacity>
+        <Text style={styles.userInfoModalText}>Name</Text>
+        <TextInput
+          style={styles.userInfoModalInput}
+          placeholder="Enter your name"
+          placeholderTextColor="grey"
+          onChangeText={(text) => {
+            setUserInfoName(text);
+          }}
+        />
+        <Text style={styles.userInfoModalText}>Email</Text>
+        <TextInput
+          style={styles.userInfoModalInput}
+          placeholder="Enter your email"
+          placeholderTextColor="grey"
+          onChangeText={(text) => {
+            setUserInfoEmail(text);
+          }}
+        />
+        <TouchableOpacity
+          style={styles.userInfoModalButton}
+          onPress={() => {
+            saveAnswers();
+            setIsUserInfoModalVisible(false);
+          }}
+        >
+          <Text style={styles.userInfoModalButtonText}>Submit</Text>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -192,13 +237,34 @@ const FillFormScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            style={styles.answerButton}
+            style={[
+              styles.answerButton,
+              { display: !isUserInfoModalVisible ? "flex" : "none" },
+            ]}
             onPress={() => {
-              saveAnswers();
+              user ? saveAnswers() : setIsUserInfoModalVisible(true);
             }}
           >
             <Text style={styles.answerText}>Save Answers</Text>
           </TouchableOpacity>
+        )}
+
+        {isUserInfoModalVisible && !isPreview && userInfoModal()}
+        {isUserInfoModalVisible && !isPreview && (
+          <View
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "white",
+              opacity: 0.9,
+              position: "absolute",
+              top: 0,
+              zIndex: 1000,
+            }}
+            onTouchStart={() => {
+              setIsUserInfoModalVisible(false);
+            }}
+          ></View>
         )}
       </View>
     );

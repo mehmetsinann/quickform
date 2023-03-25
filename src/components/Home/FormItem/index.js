@@ -125,9 +125,9 @@ const FormItem = ({ formName, submissionCount, formId, refreshPage }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `https://playpodo.vercel.app/?id=${formId}`,
+        message: `exp://192.168.1.18:19000?id=${formId}`, // TODO: Change this to the actual link after deploy website
       }).then(() => {
-        // toggleBottomNavigationView();
+        toggleBottomNavigationView();
       });
     } catch (error) {
       alert(error.message);
@@ -218,12 +218,11 @@ const FormItem = ({ formName, submissionCount, formId, refreshPage }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.sheetOptionsItem, { opacity: 0.5 }]}
+              style={[styles.sheetOptionsItem]}
               onPress={onShare}
-              disabled
             >
               <MaterialCommunityIcons name="share" size={20} color="white" />
-              <Text style={styles.sheetOptionsText}>Publish (soon)</Text>
+              <Text style={styles.sheetOptionsText}>Publish</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

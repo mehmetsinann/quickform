@@ -99,9 +99,7 @@ export default function HomeScreen({ navigation }) {
     console.log(data);
     const path = data.path;
     const queryParams = data.queryParams;
-    if (path == "form") {
-      navigation.navigate("form", { id: queryParams.id });
-    }
+    navigation.navigate("form", { formId: queryParams.id });
   };
 
   useEffect(() => {
@@ -121,7 +119,7 @@ export default function HomeScreen({ navigation }) {
     }
 
     // return () => {
-    //   subscription.remove("url");
+    //   remove("url");
     // };
   }, []);
 
