@@ -10,6 +10,8 @@ import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/Comp
 import { styles } from "./styles";
 import { db, storage } from "../../firebase/firebaseConfig";
 import firebase from "firebase";
+import { CustomModal as DeleteModal } from "../../components/CustomModal";
+import { useState } from "react";
 
 export default function SubmissionDetailScreen({ route, navigation }) {
   const {
@@ -22,6 +24,8 @@ export default function SubmissionDetailScreen({ route, navigation }) {
     submissionId,
     refreshSubmissions,
   } = route.params;
+
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const date = moment(saveTime).toLocaleString();
 
@@ -95,7 +99,9 @@ export default function SubmissionDetailScreen({ route, navigation }) {
         </View>
         <TouchableOpacity
           style={styles.deleteButton}
-          onPress={deleteSubmission}
+          onPress={() => {
+            setIsDeleteModalVisible(true);
+          }}
         >
           <MaterialCommunityIcons name="delete" size={20} color="#FF4948" />
           <Text style={[styles.sheetOptionsText, { color: "#FF4948" }]}>
@@ -113,6 +119,17 @@ export default function SubmissionDetailScreen({ route, navigation }) {
         keyExtractor={(item) => answers.indexOf(item)}
         style={{ marginTop: 20 }}
       />
+
+      {isDeleteModalVisible && (
+        <DeleteModal
+          modalText={"Delete Submission"}
+          modalSubText={"This operation cannot be undone."}
+          isVisible={isDeleteModalVisible}
+          setIsVisible={setIsDeleteModalVisible}
+          onConfirmFunc={deleteSubmission}
+          buttonOptions={["Delete", "Cancel"]}
+        />
+      )}
     </View>
   );
 }

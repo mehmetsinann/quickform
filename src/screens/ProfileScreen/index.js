@@ -19,6 +19,7 @@ import { auth, db, storage } from "../../firebase/firebaseConfig";
 import HeaderBar from "../../components/HeaderBar";
 
 import { styles } from "./styles";
+import { CustomModal as DeleteModal } from "../../components/CustomModal";
 
 export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -180,22 +181,6 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <View style={[styles.container]}>
-      {isDeleteModal ? deleteModal() : <></>}
-      {isDeleteModal ? (
-        <View
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "white",
-            opacity: 0.9,
-            position: "absolute",
-            top: 0,
-            zIndex: 999,
-          }}
-        ></View>
-      ) : (
-        <></>
-      )}
       <HeaderBar
         leftButton={headerLeftButton}
         title="Profile"
@@ -332,6 +317,17 @@ export default function ProfileScreen({ navigation }) {
           Sign Out
         </Text>
       </TouchableOpacity>
+
+      {isDeleteModal && (
+        <DeleteModal
+          modalText={"Delete Profile Photo"}
+          modalSubText={"This operation cannot be undone."}
+          buttonOptions={["Delete", "Cancel"]}
+          onConfirmFunc={deletePhoto}
+          isVisible={isDeleteModal}
+          setIsVisible={setIsDeleteModal}
+        />
+      )}
     </View>
   );
 }
