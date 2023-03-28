@@ -49,6 +49,7 @@ export default function HomeScreen({ navigation }) {
       formId={item.id}
       refreshPage={fetchForms}
       setIsDeleteModalVisible={setIsDeleteModalVisible}
+      searchTerm={searchValue}
     />
   );
 
@@ -124,7 +125,11 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    setFilteredForms(forms.filter((form) => form.title.includes(searchValue)));
+    setFilteredForms(
+      forms.filter((form) =>
+        form.title.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    );
   }, [searchValue]);
 
   const fetchForms = (loading) => {

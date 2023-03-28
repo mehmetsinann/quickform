@@ -1,11 +1,19 @@
 import { useState } from "react";
-import { Text, View, TouchableOpacity, Image, Share } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Share,
+  Linking,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BottomSheet } from "react-native-btr";
 
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 import { styles } from "./styles";
+import { HighlightedText } from "../../HighlightedText";
 
 const FormItem = ({
   formName,
@@ -13,8 +21,14 @@ const FormItem = ({
   formId,
   refreshPage,
   setIsDeleteModalVisible,
+  searchTerm,
 }) => {
   const navigation = useNavigation();
+  const [initialUrl, setInitialUrl] = useState(null);
+
+  Linking.getInitialURL().then((url) => {
+    return setInitialUrl(url);
+  });
 
   const [visible, setVisible] = useState(false);
 
@@ -30,7 +44,7 @@ const FormItem = ({
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `exp://192.168.1.18:19000?id=${formId}`, // TODO: Change this to the actual link after deploy website
+        message: `${initialUrl}?id=${formId}`, // TODO: Change this to the actual link after deploy website
       }).then(() => {
         toggleBottomNavigationView();
       });
@@ -50,7 +64,12 @@ const FormItem = ({
         resizeMode="contain"
       />
       <View style={styles.infoContainer}>
-        <Text style={styles.formName}>{formName}</Text>
+        {/* <Text style={styles.formName}>{formName}</Text> */}
+        <HighlightedText
+          searchTerm={searchTerm}
+          text={formName}
+          style={styles.formName}
+        />
         <Text style={styles.submissions}>
           {submissionCount != 0 && submissionCount
             ? `${submissionCount} submissions`

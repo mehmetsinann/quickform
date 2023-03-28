@@ -4,8 +4,15 @@ import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 
 import { styles } from "./styles";
+import { HighlightedText } from "../../HighlightedText";
 
-const SubmissionListItem = ({ data, formName, isLast, refreshSubmissions }) => {
+const SubmissionListItem = ({
+  data,
+  formName,
+  isLast,
+  refreshSubmissions,
+  searchTerm,
+}) => {
   const navigation = useNavigation();
   const time = moment(data.createdAt);
   const now = moment();
@@ -33,7 +40,11 @@ const SubmissionListItem = ({ data, formName, isLast, refreshSubmissions }) => {
         </View>
       ) : (
         <View style={styles.infoUser}>
-          <Text style={styles.name}>{data?.user.name}</Text>
+          <HighlightedText
+            style={styles.name}
+            searchTerm={searchTerm}
+            text={data?.user.name}
+          />
           <Text style={styles.email}>{data?.user.email}</Text>
         </View>
       )}

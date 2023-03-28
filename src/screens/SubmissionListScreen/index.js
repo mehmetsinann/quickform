@@ -37,7 +37,11 @@ export default function SubmissionListScreen({ route, navigation }) {
 
   useEffect(() => {
     setFilteredData(
-      data.filter((item) => item?.user?.name?.includes(searchValue))
+      data.filter(
+        (item) =>
+          item?.user?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item?.user?.email?.toLowerCase().includes(searchValue.toLowerCase())
+      )
     );
   }, [searchValue]);
 
@@ -69,6 +73,7 @@ export default function SubmissionListScreen({ route, navigation }) {
       formName={formName}
       isLast={index === filteredData.length - 1}
       refreshSubmissions={getSubmissionList}
+      searchTerm={searchValue || ""}
     />
   );
 
