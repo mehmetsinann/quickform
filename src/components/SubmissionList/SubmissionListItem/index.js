@@ -45,7 +45,11 @@ const SubmissionListItem = ({
             searchTerm={searchTerm}
             text={data?.user.name}
           />
-          <Text style={styles.email}>{data?.user.email}</Text>
+          <HighlightedText
+            style={styles.email}
+            searchTerm={searchTerm}
+            text={data?.user.email}
+          />
         </View>
       )}
 

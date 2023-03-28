@@ -4,7 +4,7 @@ import { Text } from "react-native";
 export const HighlightedText = ({ text, searchTerm, style }) => {
   const lowerCaseText = text.toLowerCase();
   const lowerCaseSearchTerm = searchTerm.toLowerCase();
-  const searchTermIndex = lowerCaseText.indexOf(lowerCaseSearchTerm[0]);
+  const searchTermIndex = lowerCaseText.indexOf(lowerCaseSearchTerm);
 
   if (searchTermIndex === -1) {
     // searchTerm is not found in text, return the original text
