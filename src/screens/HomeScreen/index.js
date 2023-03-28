@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   FlatList,
   View,
-  Dimensions,
   ActivityIndicator,
   Image,
 } from "react-native";
@@ -23,9 +22,6 @@ import { setUser } from "../../redux/slices/userSlice";
 import { db, storage } from "../../firebase/firebaseConfig";
 
 import { styles } from "./styles";
-
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
 
 export default function HomeScreen({ navigation }) {
   const [isSearch, setIsSearch] = useState(false);
@@ -237,8 +233,6 @@ export default function HomeScreen({ navigation }) {
           });
       })
       .then(() => {
-        // toggleBottomNavigationView();
-        // refreshPage(false);
         setIsDeleteModalVisible({
           isVisible: false,
           formId: null,

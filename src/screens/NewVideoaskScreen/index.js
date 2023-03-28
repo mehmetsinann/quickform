@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, Image, Dimensions } from "react-native";
+import { Text, View, TouchableOpacity, Image } from "react-native";
 import { useEffect, useState } from "react";
 
 import { Camera } from "expo-camera";

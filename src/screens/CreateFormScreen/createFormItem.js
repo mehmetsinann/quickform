@@ -1,11 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import {
-  Image,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 const CreateFormItem = ({ text, imageSource, navigateTo }) => {

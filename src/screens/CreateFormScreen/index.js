@@ -1,9 +1,11 @@
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
-import CreateFormItem from "./createFormItem";
-import { Ionicons } from "@expo/vector-icons";
-import { styles } from "./styles";
-import HeaderBar from "../../components/HeaderBar";
+import { Text, TouchableOpacity, View } from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
+import CreateFormItem from "./createFormItem";
+
+import { styles } from "./styles";
 
 const CreateFormScreen = () => {
   const navigation = useNavigation();

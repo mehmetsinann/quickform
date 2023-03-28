@@ -3,8 +3,9 @@ import { useNavigation } from "@react-navigation/native";
 
 import moment from "moment";
 
-import { styles } from "./styles";
 import { HighlightedText } from "../../HighlightedText";
+
+import { styles } from "./styles";
 
 const SubmissionListItem = ({
   data,

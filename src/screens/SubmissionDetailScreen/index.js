@@ -1,17 +1,20 @@
-import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-import moment from "moment";
 import { FlatList } from "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+
+import moment from "moment";
 
 import HeaderBar from "../../components/HeaderBar";
 import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
+import { CustomModal as DeleteModal } from "../../components/CustomModal";
 
-import { styles } from "./styles";
 import { db, storage } from "../../firebase/firebaseConfig";
 import firebase from "firebase";
-import { CustomModal as DeleteModal } from "../../components/CustomModal";
-import { useState } from "react";
+
+import { styles } from "./styles";
 
 export default function SubmissionDetailScreen({ route, navigation }) {
   const {

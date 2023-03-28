@@ -24,15 +24,6 @@ export default function SubmissionListScreen({ route, navigation }) {
   const [isSearch, setIsSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
-  // const data = new Array(20).fill({
-  //   formUser: {
-  //     name: "John Doe",
-  //     email: "johndoe@example.com",
-  //   },
-  //   createdAt: "2022-07-28T10:42:41.976Z",
-  //   steps: ["Yes", "No", "yes", "no", "yes", "no"],
-  // });
-
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {

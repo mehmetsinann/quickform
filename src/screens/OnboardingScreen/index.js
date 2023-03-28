@@ -1,7 +1,9 @@
-import { StatusBar } from "expo-status-bar";
 import { Text, View, Image } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
+import { StatusBar } from "expo-status-bar";
+
 import { useFonts } from "expo-font";
+
 import { styles } from "./styles";
 
 const slides = [

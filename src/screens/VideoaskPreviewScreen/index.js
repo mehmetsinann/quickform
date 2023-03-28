@@ -1,6 +1,5 @@
 import {
   View,
-  Dimensions,
   TouchableOpacity,
   Text,
   ActivityIndicator,
@@ -16,9 +15,6 @@ import { db, storage } from "../../firebase/firebaseConfig";
 import { setAnswers } from "../../redux/slices/answerSlice";
 
 import { styles } from "./styles";
-
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
 
 export default function VideoaskPreviewScreen(props) {
   const navigation = useNavigation();

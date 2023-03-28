@@ -19,7 +19,6 @@ const FormItem = ({
   formName,
   submissionCount,
   formId,
-  refreshPage,
   setIsDeleteModalVisible,
   searchTerm,
 }) => {
@@ -64,7 +63,6 @@ const FormItem = ({
         resizeMode="contain"
       />
       <View style={styles.infoContainer}>
-        {/* <Text style={styles.formName}>{formName}</Text> */}
         <HighlightedText
           searchTerm={searchTerm}
           text={formName}

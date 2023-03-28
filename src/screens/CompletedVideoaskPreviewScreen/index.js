@@ -1,10 +1,4 @@
-import {
-  TouchableOpacity,
-  View,
-  Dimensions,
-  Text,
-  FlatList,
-} from "react-native";
+import { TouchableOpacity, View, Text, FlatList } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
