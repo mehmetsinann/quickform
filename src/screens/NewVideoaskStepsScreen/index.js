@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Ionicons, Entypo } from "@expo/vector-icons";
 
-import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
+import CompletedVideoStepCard from "../../components/CompletedVideoStepCard";
 
 import { db } from "../../firebase/firebaseConfig";
 import { setUser } from "../../redux/slices/userSlice";

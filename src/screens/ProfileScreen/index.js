@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +33,6 @@ export default function ProfileScreen({ navigation }) {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
 
   function signOut() {
-    // token state silincek
     dispatch(removeUser());
     navigation.reset({
       index: 0,
@@ -150,7 +150,7 @@ export default function ProfileScreen({ navigation }) {
         signOut();
       })
       .catch((error) => {
-        console.log(error);
+        Alert.alert("Error", error.message);
       });
   };
 

@@ -17,7 +17,7 @@ import { styles } from "./styles";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { clearAnswers, setAnswers } from "../../redux/slices/answerSlice";
-import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
+import CompletedVideoStepCard from "../../components/CompletedVideoStepCard";
 import HeaderBar from "../../components/HeaderBar";
 import moment from "moment";
 

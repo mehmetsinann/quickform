@@ -37,11 +37,6 @@ export const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginVertical: 14,
   },
-  profilePic: {
-    width: width / 8,
-    height: width / 8,
-    borderRadius: 100,
-  },
   newVideoaskButton: {
     width: 56,
     height: 56,
@@ -88,5 +83,8 @@ export const styles = StyleSheet.create({
   createButtonText: {
     color: "white",
     fontSize: 17,
+  },
+  formList: {
+    width: "100%",
   },
 });

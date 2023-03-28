@@ -306,7 +306,11 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         {forms.length > 0 ? (
-          <FlatList data={filteredForms} renderItem={renderItem} />
+          <FlatList
+            data={filteredForms}
+            renderItem={renderItem}
+            style={styles.formList}
+          />
         ) : (
           <EmptyComponent />
         )}

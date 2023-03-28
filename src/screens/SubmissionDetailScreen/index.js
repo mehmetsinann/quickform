@@ -8,7 +8,7 @@ import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 
 import HeaderBar from "../../components/HeaderBar";
-import CompletedVideoStepCard from "../../components/CompletedVideoStepCard/CompletedVideoStepCard";
+import CompletedVideoStepCard from "../../components/CompletedVideoStepCard";
 import { CustomModal as DeleteModal } from "../../components/CustomModal";
 
 import { db, storage } from "../../firebase/firebaseConfig";
