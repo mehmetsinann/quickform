@@ -16,8 +16,11 @@ import { Entypo, Feather } from "@expo/vector-icons";
 
 import HeaderBar from "../../components/HeaderBar";
 import FormItem from "../../components/Home/FormItem";
+import { CustomModal } from "../../components/CustomModal";
 
-import { db } from "../../firebase/firebaseConfig";
+import { setUser } from "../../redux/slices/userSlice";
+
+import { db, storage } from "../../firebase/firebaseConfig";
 
 import { styles } from "./styles";
 
@@ -27,18 +30,16 @@ const height = Dimensions.get("window").height;
 export default function HomeScreen({ navigation }) {
   const [isSearch, setIsSearch] = useState(false);
   const userInfo = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const [forms, setForms] = useState([]);
   const [filteredForms, setFilteredForms] = useState([]);
-  const dispatch = useDispatch();
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState({
+    isVisible: false,
+    formId: null,
+  });
   const [isLoading, setLoading] = useState(false);
 
   const [searchValue, setSearchValue] = useState("");
-  // const forms = [
-  //   { title: "abc", answerNumber: 10, id: 1 },
-  //   { title: "bcd", answerNumber: 10, id: 1 },
-  //   { title: "cdcd", answerNumber: 10, id: 1 },
-  //   { title: "abc", answerNumber: 10, id: 1 },
-  // ];
 
   const renderItem = ({ item, index }) => (
     <FormItem
@@ -47,6 +48,7 @@ export default function HomeScreen({ navigation }) {
       submissionCount={item?.submissionCount}
       formId={item.id}
       refreshPage={fetchForms}
+      setIsDeleteModalVisible={setIsDeleteModalVisible}
     />
   );
 
@@ -109,11 +111,9 @@ export default function HomeScreen({ navigation }) {
 
     if (!userInfo) {
       navigation.replace("OnboardingScreen");
-      Linking.getInitialURL()
-        .then((url) => handleUrl(url))
-        .then(() => {
-          //dispatch(setFirstRender(true));
-        });
+      Linking.getInitialURL().then((url) =>
+        url.includes("?id") ? handleUrl(url) : null
+      );
     } else {
       fetchForms(true);
     }
@@ -140,6 +140,105 @@ export default function HomeScreen({ navigation }) {
         setForms(tempForms);
         setFilteredForms(tempForms);
         setLoading(false);
+      });
+  };
+
+  const _deleteForm = (formId) => {
+    db.collection("forms")
+      .doc(`${formId}`)
+      .delete()
+      .then(() => {
+        db.collection("forms")
+          .doc(`${formId}`)
+          .collection("submissions")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              doc.ref.delete();
+            });
+          });
+      })
+      .then(() => {
+        console.log("Form deleted!");
+        db.collection("users")
+          .doc(`${userInfo.uid}`)
+          .set({
+            ...userInfo,
+            formIDs: userInfo.formIDs.filter((id) => id !== formId),
+          })
+          .then(() => {
+            dispatch(
+              setUser({
+                ...userInfo,
+                formIDs: userInfo.formIDs.filter((id) => id !== formId),
+              })
+            );
+          })
+          .then(() => {
+            const videosRef = storage.ref(`forms/${formId}`);
+
+            videosRef
+              .listAll()
+              .then((res) => {
+                res.items.forEach((itemRef) => {
+                  itemRef
+                    .delete()
+                    .then(() => {
+                      console.log("Video deleted successfully!");
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .then(async () => {
+            const submissionIDs = [];
+            await db
+              .collection("forms")
+              .doc(`${formId}`)
+              .collection("submissions")
+              .get()
+              .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                  submissionIDs.push(doc.id);
+                });
+              });
+            const folderRef = storage.ref(`submissions/${formId}`);
+
+            submissionIDs.forEach((id) => {
+              folderRef
+                .child(`${id}`)
+                .listAll()
+                .then((res) => {
+                  res.items.forEach(async (itemRef) => {
+                    await itemRef
+                      .delete()
+                      .then(() => {
+                        console.log("Video deleted successfully!");
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  });
+                });
+            });
+          })
+          .then(() => {
+            console.log("Videos deleted");
+          });
+      })
+      .then(() => {
+        // toggleBottomNavigationView();
+        // refreshPage(false);
+        setIsDeleteModalVisible({
+          isVisible: false,
+          formId: null,
+        });
+        fetchForms();
       });
   };
 
@@ -211,6 +310,16 @@ export default function HomeScreen({ navigation }) {
           <FlatList data={filteredForms} renderItem={renderItem} />
         ) : (
           <EmptyComponent />
+        )}
+        {isDeleteModalVisible.isVisible && (
+          <CustomModal
+            modalText={"Delete Form"}
+            modalSubText={"This operation cannot be undone."}
+            isVisible={isDeleteModalVisible}
+            setIsVisible={setIsDeleteModalVisible}
+            onConfirmFunc={() => _deleteForm(isDeleteModalVisible.formId)}
+            buttonOptions={["Delete", "Cancel"]}
+          />
         )}
       </View>
     );
