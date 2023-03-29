@@ -32,9 +32,10 @@ const FillFormScreen = ({ navigation, route }) => {
   const [submissionID, setSubmissionID] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [shouldPlay, setShouldPlay] = useState(true);
-  const [isUserInfoModalVisible, setIsUserInfoModalVisible] = useState(false);
   const [userInfoName, setUserInfoName] = useState(user?.name || "");
+  const nameInputRef = React.useRef(null);
   const [userInfoEmail, setUserInfoEmail] = useState(user?.email || "");
+  const emailInputRef = React.useRef(null);
 
   const getForm = () => {
     db.collection("forms")
@@ -136,42 +137,30 @@ const FillFormScreen = ({ navigation, route }) => {
     );
   };
 
-  const userInfoModal = () => {
+  const userInfoSide = () => {
+    // TODO :: set this side like name and email in the profile
     return (
-      <View style={styles.userInfoModal}>
-        <TouchableOpacity
-          onPress={() => setIsUserInfoModalVisible(false)}
-          style={styles.modalCloseIcon}
-        >
-          <Ionicons name="close" size={24} color="white" />
-        </TouchableOpacity>
-        <Text style={styles.userInfoModalText}>Name</Text>
+      <View style={styles.userInfoContainer}>
+        <Text style={styles.userInfoLabel}>Name</Text>
         <TextInput
-          style={styles.userInfoModalInput}
-          placeholder="Enter your name"
-          placeholderTextColor="grey"
+          style={styles.userInfoInput}
           onChangeText={(text) => {
             setUserInfoName(text);
           }}
+          value={userInfoName}
+          keyboardType={"text"}
+          ref={nameInputRef}
         />
-        <Text style={styles.userInfoModalText}>Email</Text>
+        <Text style={styles.userInfoLabel}>Email</Text>
         <TextInput
-          style={styles.userInfoModalInput}
-          placeholder="Enter your email"
-          placeholderTextColor="grey"
+          style={styles.userInfoInput}
           onChangeText={(text) => {
             setUserInfoEmail(text);
           }}
+          value={userInfoEmail}
+          keyboardType={"email-address"}
+          ref={emailInputRef}
         />
-        <TouchableOpacity
-          style={styles.userInfoModalButton}
-          onPress={() => {
-            saveAnswers();
-            setIsUserInfoModalVisible(false);
-          }}
-        >
-          <Text style={styles.userInfoModalButtonText}>Submit</Text>
-        </TouchableOpacity>
       </View>
     );
   };
@@ -215,10 +204,14 @@ const FillFormScreen = ({ navigation, route }) => {
             renderItem={renderItem}
             style={{
               zIndex: 1000,
-              marginTop: Dimensions.get("window").height / 10,
+              marginTop: Dimensions.get("window").height / 36,
+              width: "100%",
+              marginVertical: !isPreview && !user ? 0 : 100,
             }}
           />
         )}
+
+        {!isPreview && !user && userInfoSide()}
 
         {isPreview ? (
           <TouchableOpacity
@@ -236,34 +229,19 @@ const FillFormScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            style={[
-              styles.answerButton,
-              { display: !isUserInfoModalVisible ? "flex" : "none" },
-            ]}
+            style={[styles.answerButton]}
             onPress={() => {
-              user ? saveAnswers() : setIsUserInfoModalVisible(true);
+              user
+                ? saveAnswers()
+                : userInfoName === ""
+                ? nameInputRef.current.focus()
+                : userInfoEmail === ""
+                ? emailInputRef.current.focus()
+                : saveAnswers(); // if user is not logged in, focus to input side
             }}
           >
             <Text style={styles.answerText}>Save Answers</Text>
           </TouchableOpacity>
-        )}
-
-        {isUserInfoModalVisible && !isPreview && userInfoModal()}
-        {isUserInfoModalVisible && !isPreview && (
-          <View
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "white",
-              opacity: 0.9,
-              position: "absolute",
-              top: 0,
-              zIndex: 1000,
-            }}
-            onTouchStart={() => {
-              setIsUserInfoModalVisible(false);
-            }}
-          ></View>
         )}
       </View>
     );
