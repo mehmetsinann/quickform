@@ -154,30 +154,6 @@ export default function ProfileScreen({ navigation }) {
       });
   };
 
-  const deleteModal = () => {
-    return (
-      <View style={styles.deleteModalContainer}>
-        <Text style={styles.deleteModalText}>
-          Are you sure to delete profile photo?
-        </Text>
-        <View style={styles.deleteModalButtonContainer}>
-          <TouchableOpacity
-            style={[styles.deleteModalButton, { backgroundColor: "red" }]}
-            onPress={() => setIsDeleteModal(false)}
-          >
-            <Text style={{ color: "white" }}>No</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.deleteModalButton, { backgroundColor: "green" }]}
-            onPress={deletePhoto}
-          >
-            <Text style={{ color: "white" }}>Yes</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
-
   return (
     <View style={[styles.container]}>
       <HeaderBar
@@ -193,7 +169,10 @@ export default function ProfileScreen({ navigation }) {
         >
           <MaterialIcons name="system-update-tv" size={24} color="blue" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.profilePicContainer} disabled>
+        <TouchableOpacity
+          style={styles.profilePicContainer}
+          onPress={pickImage}
+        >
           <Image
             style={styles.profilePic}
             source={{
