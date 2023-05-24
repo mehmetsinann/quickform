@@ -41,9 +41,10 @@ const FormItem = ({
   };
 
   const onShare = async () => {
+    const initialUrl = "https://quickform-web.vercel.app/?id=";
     try {
       const result = await Share.share({
-        message: `${initialUrl}?id=${formId}`, // TODO: Change this to the actual link after deploy website
+        message: `${initialUrl}${formId}`,
       }).then(() => {
         toggleBottomNavigationView();
       });

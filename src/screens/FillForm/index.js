@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Dimensions,
   FlatList,
+  KeyboardAvoidingView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -140,7 +141,10 @@ const FillFormScreen = ({ navigation, route }) => {
   const userInfoSide = () => {
     // TODO :: set this side like name and email in the profile
     return (
-      <View style={styles.userInfoContainer}>
+      <KeyboardAvoidingView
+        style={styles.userInfoContainer}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <Text style={styles.userInfoLabel}>Name</Text>
         <TextInput
           style={styles.userInfoInput}
@@ -161,7 +165,7 @@ const FillFormScreen = ({ navigation, route }) => {
           keyboardType={"email-address"}
           ref={emailInputRef}
         />
-      </View>
+      </KeyboardAvoidingView>
     );
   };
 
