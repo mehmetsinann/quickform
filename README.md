@@ -18,7 +18,7 @@ These instructions will help you get a copy of the project up and running on you
 - Node.js (v12 or higher)
 - Expo CLI
 
-### Installation
+## Installation
 
 1. Clone the repository:
 
@@ -38,8 +38,9 @@ cd quickform
 yarn install
 ```
 
-## Before Getting Started
+## Before Starting QuickForm
 Before running the project, you need to create a `.env` file that contains your Firebase credentials. This file will include the secret information that allows the application to access the Firebase server.
+
 ### Steps:
 
 1. Create a new file named .env in the project directory.
