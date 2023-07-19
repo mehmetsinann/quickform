@@ -10,7 +10,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-import * as Linking from "expo-linking";
 import { Entypo, Feather } from "@expo/vector-icons";
 
 import HeaderBar from "../../components/HeaderBar";
@@ -93,31 +92,12 @@ export default function HomeScreen({ navigation }) {
     );
   };
 
-  const handleUrl = (url) => {
-    let data = Linking.parse(url);
-    console.log(data);
-    const path = data.path;
-    const queryParams = data.queryParams;
-    navigation.navigate("form", { formId: queryParams.id });
-  };
-
   useEffect(() => {
-    Linking.addEventListener("url", (event) => {
-      handleUrl(event.url);
-    });
-
     if (!userInfo) {
       navigation.replace("OnboardingScreen");
-      Linking.getInitialURL().then((url) =>
-        url.includes("?id") ? handleUrl(url) : null
-      );
     } else {
       fetchForms(true);
     }
-
-    // return () => {
-    //   remove("url");
-    // };
   }, []);
 
   useEffect(() => {

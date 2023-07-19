@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Share,
-  Linking,
-} from "react-native";
+import { Text, View, TouchableOpacity, Image, Share } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BottomSheet } from "react-native-btr";
 
@@ -23,11 +16,6 @@ const FormItem = ({
   searchTerm,
 }) => {
   const navigation = useNavigation();
-  const [initialUrl, setInitialUrl] = useState(null);
-
-  Linking.getInitialURL().then((url) => {
-    return setInitialUrl(url);
-  });
 
   const [visible, setVisible] = useState(false);
 
