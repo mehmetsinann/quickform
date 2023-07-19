@@ -32,7 +32,7 @@ export default function Navigation() {
 
   return (
     <NavigationContainer linking={linking}>
-      <Stack.Navigator initialRouteName="HomeScreen">
+      <Stack.Navigator initialRouteName="OnboardingScreen">
         <Stack.Screen
           name="OnboardingScreen"
           component={OnboardingScreen}

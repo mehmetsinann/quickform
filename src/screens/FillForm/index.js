@@ -127,13 +127,17 @@ const FillFormScreen = ({ navigation, route }) => {
   const headerLeftButton = () => {
     const handleBack = () => {
       dispatch(clearAnswers());
-      navigation.goBack();
+      if (user) {
+        navigation.reset({ index: 0, routes: [{ name: "HomeScreen" }] });
+      } else {
+        navigation.reset({ index: 0, routes: [{ name: "OnboardingScreen" }] });
+      }
       setVisibleIndex(0);
     };
 
     return (
       <TouchableOpacity onPress={handleBack}>
-        <Ionicons name="chevron-back" size={24} color="white" />
+        <Ionicons name="close" size={24} color="white" />
       </TouchableOpacity>
     );
   };
@@ -152,7 +156,6 @@ const FillFormScreen = ({ navigation, route }) => {
             setUserInfoName(text);
           }}
           value={userInfoName}
-          keyboardType={"text"}
           ref={nameInputRef}
         />
         <Text style={styles.userInfoLabel}>Email</Text>
