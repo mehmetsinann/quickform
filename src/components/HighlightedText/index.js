@@ -7,7 +7,6 @@ export const HighlightedText = ({ text, searchTerm, style }) => {
   const searchTermIndex = lowerCaseText.indexOf(lowerCaseSearchTerm);
 
   if (searchTermIndex === -1) {
-    // searchTerm is not found in text, return the original text
     return <Text style={style}>{text}</Text>;
   }
 

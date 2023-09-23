@@ -17,7 +17,6 @@ import VideoaskPreviewScreen from "../screens/VideoaskPreviewScreen";
 import NewVideoaskStepsScreen from "../screens/NewVideoaskStepsScreen";
 import FillFormScreen from "../screens/FillForm";
 import * as Linking from "expo-linking";
-import CreateFormScreen from "../screens/CreateFormScreen";
 
 const Stack = createStackNavigator();
 
