@@ -5,8 +5,9 @@ import { BottomSheet } from "react-native-btr";
 
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
-import { styles } from "./styles";
 import { HighlightedText } from "../../HighlightedText";
+
+import { styles } from "./styles";
 
 const FormItem = ({
   formName,

@@ -10,14 +10,12 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0A1551"
+      "backgroundColor": "#111"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "src/assets/images/*"
-    ],
+    "assetBundlePatterns": ["src/assets/images/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mehmetsinann.quickform"

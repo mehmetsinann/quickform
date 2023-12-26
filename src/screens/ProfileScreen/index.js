@@ -17,9 +17,9 @@ import { removeUser, setUser } from "../../redux/slices/userSlice";
 import { auth, db, storage } from "../../firebase/firebaseConfig";
 
 import HeaderBar from "../../components/HeaderBar";
+import { CustomModal as DeleteModal } from "../../components/CustomModal";
 
 import { styles } from "./styles";
-import { CustomModal as DeleteModal } from "../../components/CustomModal";
 
 export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();

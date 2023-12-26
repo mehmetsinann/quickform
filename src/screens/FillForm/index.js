@@ -1,7 +1,4 @@
-// TODO :: edit imports
-import React from "react";
-import { Video } from "expo-av";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -12,19 +9,22 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { db, storage } from "../../firebase/firebaseConfig";
-import { useEffect } from "react";
-import { styles } from "./styles";
-import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { clearAnswers, setAnswers } from "../../redux/slices/answerSlice";
+import { Video } from "expo-av";
+import moment from "moment";
+import { Ionicons } from "@expo/vector-icons";
+
+import { db, storage } from "../../firebase/firebaseConfig";
+import { clearAnswers } from "../../redux/slices/answerSlice";
+
 import CompletedVideoStepCard from "../../components/CompletedVideoStepCard";
 import HeaderBar from "../../components/HeaderBar";
-import moment from "moment";
+
+import { styles } from "./styles";
 
 const FillFormScreen = ({ navigation, route }) => {
   const watchVideo = React.useRef(null);
-  const { formId, formName } = route.params;
+  const { formId } = route.params;
   const [visibleIndex, setVisibleIndex] = useState(0);
   const [form, setForm] = useState();
   const dispatch = useDispatch();
@@ -66,8 +66,6 @@ const FillFormScreen = ({ navigation, route }) => {
   useEffect(() => {
     _setSubmissionID();
   }, []);
-
-  // console.log(answers, visibleIndex);
 
   const renderItem = ({ item, index }) => {
     return (
@@ -143,7 +141,6 @@ const FillFormScreen = ({ navigation, route }) => {
   };
 
   const userInfoSide = () => {
-    // TODO :: set this side like name and email in the profile
     return (
       <KeyboardAvoidingView
         style={styles.userInfoContainer}

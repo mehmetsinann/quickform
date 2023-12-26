@@ -1,10 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Video } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+
 import { db, storage } from "../../firebase/firebaseConfig";
 
 import { styles } from "./styles";

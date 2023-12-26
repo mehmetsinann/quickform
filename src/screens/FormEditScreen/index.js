@@ -14,8 +14,9 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Ionicons, Entypo } from "@expo/vector-icons";
 
-import CompletedVideoStepCard from "../../components/CompletedVideoStepCard";
 import { db } from "../../firebase/firebaseConfig";
+
+import CompletedVideoStepCard from "../../components/CompletedVideoStepCard";
 
 import { styles } from "./styles";
 
