@@ -1,6 +1,6 @@
 # QuickForm
 
-QuickForm is a mobile application that allows users to create video-based forms. Users can record a video while asking a question and create a form with multiple questions. These forms can then be shared with other users, who can respond to each question by recording their own videos. The main goal of the application is to facilitate video-based form creation and response collection.
+QuickForm is a mobile application that allows users to create video-based forms. Users can record a video while asking a question and create a form with multiple questions. These forms can then be shared with other users, who can respond to each question by recording their own videos. The main goal of the application is to facilitate video-based form creation and response collection. <br /> [Watch Demo](https://drive.google.com/file/d/1fDX404tfJ2-HF3uJFYSJCu-c162h9x8_/view?usp=sharing)
 
 ## Features
 
