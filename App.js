@@ -1,12 +1,11 @@
+import { useState, useEffect, useCallback } from "react";
+import { StyleSheet, View } from "react-native";
+import { Provider } from "react-redux";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
+
 import Navigation from "./src/navigation/Navigation";
 import store from "./src/redux/store";
-import { Provider } from "react-redux";
-import * as SplashScreen from "expo-splash-screen";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useCallback } from "react";
 
 SplashScreen.preventAutoHideAsync();
 

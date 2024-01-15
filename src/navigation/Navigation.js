@@ -1,8 +1,11 @@
+import { useState, useEffect } from "react";
 import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Linking from "expo-linking";
 
 import SubmissionListScreen from "../screens/SubmissionListScreen";
 import FormEditScreen from "../screens/FormEditScreen";
@@ -16,13 +19,24 @@ import SubmissionDetailScreen from "../screens/SubmissionDetailScreen";
 import VideoaskPreviewScreen from "../screens/VideoaskPreviewScreen";
 import NewVideoaskStepsScreen from "../screens/NewVideoaskStepsScreen";
 import FillFormScreen from "../screens/FillForm";
-import * as Linking from "expo-linking";
 
 const Stack = createStackNavigator();
 
 const prefix = Linking.createURL("/");
 
 export default function Navigation() {
+  const [showOnboarding, setShowOnboarding] = useState(true);
+
+  useEffect(() => {
+    AsyncStorage.getItem("onboardingShown")
+      .then((value) => {
+        if (value) {
+          setShowOnboarding(false);
+        }
+      })
+      .catch((error) => console.error("AsyncStorage Error:", error));
+  }, []);
+
   const linking = {
     prefixes: [prefix],
   };
@@ -32,11 +46,13 @@ export default function Navigation() {
   return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="OnboardingScreen">
-        <Stack.Screen
-          name="OnboardingScreen"
-          component={OnboardingScreen}
-          options={{ headerShown: false }}
-        />
+        {showOnboarding && (
+          <Stack.Screen
+            name="OnboardingScreen"
+            component={OnboardingScreen}
+            options={{ headerShown: false }}
+          />
+        )}
         <Stack.Screen
           name="LoginScreen"
           component={LoginScreen}

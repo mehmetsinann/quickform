@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Text, View, Image } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 
 import { useFonts } from "expo-font";
@@ -30,6 +32,9 @@ const slides = [
 ];
 
 export default function OnboardingScreen({ navigation }) {
+  useEffect(() => {
+    AsyncStorage.setItem("onboardingShown", "1");
+  }, []);
   const [loaded] = useFonts({
     HandleeRegular: require("../../../assets/fonts/Handlee-Regular.ttf"),
   });
