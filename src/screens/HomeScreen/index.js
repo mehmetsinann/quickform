@@ -98,6 +98,10 @@ export default function HomeScreen({ navigation }) {
     } else {
       fetchForms(true);
     }
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchForms(true);
+    });
+    return unsubscribe;
   }, []);
 
   useEffect(() => {

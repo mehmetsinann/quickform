@@ -17,16 +17,8 @@ import firebase from "firebase";
 import { styles } from "./styles";
 
 export default function SubmissionDetailScreen({ route, navigation }) {
-  const {
-    answers,
-    name,
-    email,
-    saveTime,
-    formName,
-    formId,
-    submissionId,
-    refreshSubmissions,
-  } = route.params;
+  const { answers, name, email, saveTime, formName, formId, submissionId } =
+    route.params;
 
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
@@ -81,7 +73,6 @@ export default function SubmissionDetailScreen({ route, navigation }) {
               });
           })
           .then(() => {
-            refreshSubmissions();
             navigation.goBack();
           });
       });

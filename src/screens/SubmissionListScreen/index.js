@@ -55,6 +55,11 @@ export default function SubmissionListScreen({ route, navigation }) {
 
   useEffect(() => {
     getSubmissionList();
+    // eğer submission detail ekranından goback ile bu ekrana dönülürse getSumbissionList bir daha çalışsın
+    const unsubscribe = navigation.addListener("focus", () => {
+      getSubmissionList();
+    });
+    return unsubscribe;
   }, []);
 
   const renderItem = ({ item, index }) => (
@@ -63,7 +68,6 @@ export default function SubmissionListScreen({ route, navigation }) {
       data={item}
       formName={formName}
       isLast={index === filteredData.length - 1}
-      refreshSubmissions={getSubmissionList}
       searchTerm={searchValue || ""}
     />
   );

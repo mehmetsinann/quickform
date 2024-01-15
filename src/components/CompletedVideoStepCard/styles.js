@@ -10,14 +10,6 @@ export const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 15,
     alignSelf: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 4.65,
-    elevation: 6,
   },
   video: {
     width: "100%",
