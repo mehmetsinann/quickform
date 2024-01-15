@@ -85,6 +85,7 @@ export default function ProfileScreen({ navigation }) {
 
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
+      setIsLoading(true);
       const response = await fetch(result.uri);
       const blob = await response.blob();
 
@@ -110,6 +111,9 @@ export default function ProfileScreen({ navigation }) {
             .then(() => {
               dispatch(setUser({ ...userInfo, photoURL: photoURL }));
             });
+        })
+        .then(() => {
+          setIsLoading(false);
         });
     }
   };
@@ -173,24 +177,26 @@ export default function ProfileScreen({ navigation }) {
           style={styles.profilePicContainer}
           onPress={pickImage}
         >
-          <Image
-            style={styles.profilePic}
-            source={{
-              uri: userInfo?.photoURL
-                ? userInfo?.photoURL
-                : "https://cdn.jotfor.ms/assets/img/v4/avatar/Podo-Avatar2-03.png?ssl=1",
-            }}
-          />
+          {!isLoading ? (
+            <Image
+              style={styles.profilePic}
+              source={{
+                uri:
+                  userInfo?.photoURL ||
+                  "https://cdn.jotfor.ms/assets/img/v4/avatar/Podo-Avatar2-03.png?ssl=1",
+              }}
+            />
+          ) : (
+            <ActivityIndicator />
+          )}
         </TouchableOpacity>
-        {userInfo?.photoURL ? (
+        {userInfo?.photoURL && (
           <TouchableOpacity
             style={{ position: "absolute", top: 12, right: 12 }}
             onPress={handleRemovePic}
           >
             <Feather name="trash-2" size={24} color="red" />
           </TouchableOpacity>
-        ) : (
-          <></>
         )}
       </View>
 
